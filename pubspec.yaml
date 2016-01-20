@@ -1,0 +1,11 @@
+name: transformer_utils
+version: 0.0.0
+dependencies:
+  analyzer: "^0.27.0"
+  barback: "^0.15.0"
+  path: "^1.3.0"
+  source_span: "^1.2.0"
+dev_dependencies:
+  dart_dev: "^1.0.6"
+  dart_style: "^0.2.2"
+  test: "^0.12.6"
