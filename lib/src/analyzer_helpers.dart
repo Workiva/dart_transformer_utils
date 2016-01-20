@@ -5,7 +5,7 @@ import 'dart:mirrors' as mirrors;
 import 'package:analyzer/analyzer.dart';
 import 'package:barback/barback.dart';
 
-import 'package:transformer_utils/src/declaration_with_meta.dart';
+import 'package:transformer_utils/src/node_with_meta.dart';
 
 /// Copy a class [member] declaration with [body] as a new implementation.
 ///
@@ -30,7 +30,7 @@ String copyClassMember(ClassMember member, String body) {
 /// If this is being leveraged within a transformer, you can associate the
 /// returned [DeclarationWithMeta] instance with the asset in which it is
 /// located by passing in an [assetId].
-Iterable<DeclarationWithMeta> getDeclarationsAnnotatedBy(
+Iterable<NodeWithMeta> getDeclarationsAnnotatedBy(
     CompilationUnit unit, annotation,
     {AssetId assetId}) {
   var annotationName = _getReflectedName(annotation);
@@ -38,11 +38,7 @@ Iterable<DeclarationWithMeta> getDeclarationsAnnotatedBy(
     return member.metadata
         .where((meta) => meta.name.name == annotationName)
         .isNotEmpty;
-  }).map((member) {
-    var instantiatedAnnotation = instantiateAnnotation(member, annotation);
-    return new DeclarationWithMeta(member, instantiatedAnnotation,
-        assetId: assetId);
-  });
+  }).map((member) => new NodeWithMeta(member, assetId: assetId));
 }
 
 /// Given a [literal] (an AST node), this returns the literal's value.
