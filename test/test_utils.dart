@@ -13,7 +13,7 @@ class TestAnnotation {
         named = null;
 }
 
-CompilationUnitMember parseAndGetSingleMember(String source) {
+CompilationUnitMember parseAndGetFirstMember(String source) {
   var compilationUnit = parseCompilationUnit(source);
-  return compilationUnit.declarations.single;
+  return compilationUnit.declarations.first;
 }

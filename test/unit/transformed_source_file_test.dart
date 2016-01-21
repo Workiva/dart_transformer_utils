@@ -166,7 +166,7 @@ main() {
         expect(html, matches(new RegExp(r'^\s*<\!DOCTYPE html>\s*<html>')));
         expect(
             html,
-            contains('<title>web_skin_dart Transformer Diff - '
+            contains('<title>Transformer Diff - '
                 'test_source_file.dart'
                 '</title>'));
         expect(
