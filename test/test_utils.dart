@@ -1,6 +1,6 @@
 library transformer_utils.test_utils;
 
-import 'package:analyzer/analyzer.dart' hide startsWith;
+import 'package:analyzer/analyzer.dart';
 
 class TestAnnotation {
   final positional;

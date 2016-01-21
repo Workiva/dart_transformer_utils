@@ -10,8 +10,9 @@ class JetBrainsFriendlyLogger implements TransformLogger {
 
   JetBrainsFriendlyLogger(TransformLogger this._logger);
 
-  /// Returns a String reference to the specified [span], formatted in a way that JetBrains IDEs understand
-  /// so that links in Pub output take you to the right place in the file when you click on them.
+  /// Returns a String reference to the specified [span], formatted in a way
+  /// that JetBrains IDEs understand so that links in Pub output take you to the
+  /// right place in the file when you click on them.
   static String clickableReference(SourceSpan span) {
     String spanString = '';
     if (span != null) {
@@ -25,8 +26,8 @@ class JetBrainsFriendlyLogger implements TransformLogger {
     return spanString;
   }
 
-  /// Returns the source line of text represented by [span] with the span highlighted
-  /// in a human-readable format.
+  /// Returns the source line of text represented by [span] with the span
+  /// highlighted in a human-readable format.
   ///
   /// Example, for the following code:
   ///
@@ -51,7 +52,8 @@ class JetBrainsFriendlyLogger implements TransformLogger {
     return message;
   }
 
-  /// Returns a [message] with added source location and text from an optional [span].
+  /// Returns a [message] with added source location and text from an optional
+  /// [span].
   static String formatMessageWithSpan(String message, SourceSpan span) {
     if (span == null) {
       return message;

@@ -19,9 +19,10 @@ main() {
 
     group('clickableReference()', () {
       test('returns a properly-formatted reference to a source span', () {
-        SourceFile sourceFile = new SourceFile('line 1\nline 2 TARGET\n line 3', url: 'source_url');
-        SourceSpan span = sourceFile.span(sourceFile.getText(0).indexOf('TARGET'));
-        String formatted = JetBrainsFriendlyLogger.clickableReference(span);
+        var lines = ['line 1', 'line 2 TARGET', 'line 3'];
+        var sourceFile = new SourceFile(lines.join('\n'), url: 'source_url');
+        var span = sourceFile.span(sourceFile.getText(0).indexOf('TARGET'));
+        var formatted = JetBrainsFriendlyLogger.clickableReference(span);
         expect(formatted, '[source_url 2:8]: ');
       });
 
@@ -32,15 +33,19 @@ main() {
 
     group('highlightedSpanText()', () {
       test('returns the highlighted text of a source span', () {
-        SourceFile sourceFile = new SourceFile('line 1\nline 2 TARGET\n line 3', url: 'source_url');
+        var lines = ['line 1', 'line 2 TARGET', 'line 3'];
+        var sourceFile = new SourceFile(lines.join('\n'), url: 'source_url');
         int targetIndex = sourceFile.getText(0).indexOf('TARGET');
-        SourceSpan span = sourceFile.span(targetIndex, targetIndex + 'TARGET'.length);
-        expect(span.text, 'TARGET', reason: 'should have set up the test as expected');
+        var span = sourceFile.span(targetIndex, targetIndex + 'TARGET'.length);
+        expect(span.text, 'TARGET',
+            reason: 'should have set up the test as expected');
 
+        var expectedLines = [
+          'line 2 TARGET',
+          '       ^^^^^^' // should underline "TARGET"
+        ];
         expect(JetBrainsFriendlyLogger.highlightedSpanText(span),
-            'line 2 TARGET\n'
-                '       ^^^^^^'
-        );
+            expectedLines.join('\n'));
       });
     });
 
@@ -52,7 +57,7 @@ main() {
       String message;
 
       setUp(() {
-        SourceFile sourceFile = new SourceFile('source file');
+        var sourceFile = new SourceFile('source file');
 
         span = sourceFile.span(0);
         spanReference = JetBrainsFriendlyLogger.clickableReference(span);
@@ -61,29 +66,34 @@ main() {
         message = 'message';
       });
 
-      group('prepending the message with the formatted source span when a span is specified:', () {
+      group('prepends the message with the formatted source span', () {
         test('info()', () {
           logger.info(message, asset: asset, span: span);
-          verify(mockWrappedLogger.info('$spanReference$message\n$highlightedSpan', asset: asset));
+          verify(mockWrappedLogger
+              .info('$spanReference$message\n$highlightedSpan', asset: asset));
         });
 
         test('fine()', () {
           logger.fine(message, asset: asset, span: span);
-          verify(mockWrappedLogger.fine('$spanReference$message\n$highlightedSpan', asset: asset));
+          verify(mockWrappedLogger
+              .fine('$spanReference$message\n$highlightedSpan', asset: asset));
         });
 
         test('warning()', () {
           logger.warning(message, asset: asset, span: span);
-          verify(mockWrappedLogger.warning('$spanReference$message\n$highlightedSpan', asset: asset));
+          verify(mockWrappedLogger.warning(
+              '$spanReference$message\n$highlightedSpan',
+              asset: asset));
         });
 
         test('error()', () {
           logger.error(message, asset: asset, span: span);
-          verify(mockWrappedLogger.error('$spanReference$message\n$highlightedSpan', asset: asset));
+          verify(mockWrappedLogger
+              .error('$spanReference$message\n$highlightedSpan', asset: asset));
         });
       });
 
-      group('leaving the message as-is when a span is not specified:', () {
+      group('leaves the message as-is when a span is not specified', () {
         test('info()', () {
           logger.info(message, asset: asset);
           verify(mockWrappedLogger.info(message, asset: asset));

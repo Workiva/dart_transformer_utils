@@ -8,127 +8,95 @@ import 'package:transformer_utils/transformer_utils.dart';
 import '../test_utils.dart';
 
 main() {
-  group('Analyzer Helpers', () {
-    group('instantiateAnnotation()', () {
-      group('instantiates an annotation with a parameter value specified as',
-          () {
-        test('a string literal', () {
-          TestAnnotation instance = instantiateAnnotation(
-              parseAndGetSingleMember('@TestAnnotation("hello")\nvar a;'),
-              TestAnnotation);
-          expect(instance.positional, "hello");
-        });
-
-        test('a concatenated string literal', () {
-          TestAnnotation instance = instantiateAnnotation(
-              parseAndGetSingleMember(
-                  '@TestAnnotation("hello " "there")\nvar a;'),
-              TestAnnotation);
-          expect(instance.positional, "hello there");
-        });
-
-        test('a boolean literal', () {
-          TestAnnotation instance = instantiateAnnotation(
-              parseAndGetSingleMember('@TestAnnotation(true)\nvar a;'),
-              TestAnnotation);
-          expect(instance.positional, true);
-        });
-
-        test('an integer literal', () {
-          TestAnnotation instance = instantiateAnnotation(
-              parseAndGetSingleMember('@TestAnnotation(1)\nvar a;'),
-              TestAnnotation);
-          expect(instance.positional, 1);
-        });
-
-        test('a null literal', () {
-          TestAnnotation instance = instantiateAnnotation(
-              parseAndGetSingleMember('@TestAnnotation(null)\nvar a;'),
-              TestAnnotation);
-          expect(instance.positional, null);
-        });
+  group('instantiateAnnotation()', () {
+    group('instantiates an annotation with a parameter value specified as', () {
+      test('a string literal', () {
+        var node = parseAndGetSingleMember('@TestAnnotation("hello")\nvar a;');
+        TestAnnotation instance = instantiateAnnotation(node, TestAnnotation);
+        expect(instance.positional, "hello");
       });
 
-      group(
-          'throws when an annotation parameter value is specified as an unsupported value:',
-          () {
-        test('a constant expression', () {
-          expect(
-              () => instantiateAnnotation(
-                  parseAndGetSingleMember('@TestAnnotation(const [])\nvar a;'),
-                  TestAnnotation),
-              throws);
-        });
-
-        test('an interpolated String', () {
-          expect(
-              () => instantiateAnnotation(
-                  parseAndGetSingleMember(
-                      '@TestAnnotation("\$someVariable")\nvar a;'),
-                  TestAnnotation),
-              throws);
-        });
-
-        test('a constant variable', () {
-          expect(
-              () => instantiateAnnotation(
-                  parseAndGetSingleMember(
-                      'const int one = 1;\n@TestAnnotation(one)\nvar a;'),
-                  TestAnnotation),
-              throws);
-        });
+      test('a concatenated string literal', () {
+        var node = parseAndGetSingleMember('@TestAnnotation("he" "y")\nvar a;');
+        TestAnnotation instance = instantiateAnnotation(node, TestAnnotation);
+        expect(instance.positional, "hey");
       });
 
-      test(
-          'instantiates an annotation with both named and positional parameters',
-          () {
-        TestAnnotation instance = instantiateAnnotation(
-            parseAndGetSingleMember('@TestAnnotation(1, named: 2)\nvar a;'),
-            TestAnnotation);
+      test('a boolean literal', () {
+        var node = parseAndGetSingleMember('@TestAnnotation(true)\nvar a;');
+        TestAnnotation instance = instantiateAnnotation(node, TestAnnotation);
+        expect(instance.positional, true);
+      });
+
+      test('an integer literal', () {
+        var node = parseAndGetSingleMember('@TestAnnotation(1)\nvar a;');
+        TestAnnotation instance = instantiateAnnotation(node, TestAnnotation);
         expect(instance.positional, 1);
-        expect(instance.named, 2);
       });
 
-      test('instantiates an annotation using a named constructor', () {
-        TestAnnotation instance = instantiateAnnotation(
-            parseAndGetSingleMember(
-                '@TestAnnotation.namedConstructor(namedConstructorOnly: true)\nvar a;'),
-            TestAnnotation);
-        expect(instance.namedConstructorOnly, true);
+      test('a null literal', () {
+        var node = parseAndGetSingleMember('@TestAnnotation(null)\nvar a;');
+        TestAnnotation instance = instantiateAnnotation(node, TestAnnotation);
+        expect(instance.positional, null);
+      });
+    });
+
+    group('throws when an annotation parameter value is unsupported:', () {
+      test('a constant expression', () {
+        var node = parseAndGetSingleMember('@TestAnnotation(const [])\nvar a;');
+        expect(() => instantiateAnnotation(node, TestAnnotation), throws);
       });
 
-      test('throws if the annotation cannot be constructed', () {
-        expect(
-            () => instantiateAnnotation(
-                parseAndGetSingleMember(
-                    '@TestAnnotation(1, 2, 3, 4, "way more parameters than were declared")\nvar a;'),
-                TestAnnotation),
-            throwsA(startsWith('Unable to instantiate annotation')));
+      test('an interpolated String', () {
+        var node = parseAndGetSingleMember('@TestAnnotation("\$v")\nvar a;');
+        expect(() => instantiateAnnotation(node, TestAnnotation), throws);
       });
 
-      test('throws if the annotation is not used as a constructor', () {
-        expect(
-            () => instantiateAnnotation(
-                parseAndGetSingleMember('@TestAnnotation\nvar a;'),
-                TestAnnotation),
-            throwsA(startsWith('Annotation not invocation of constructor')));
+      test('a constant variable', () {
+        var node = parseAndGetSingleMember(
+            'const int one = 1;\n@TestAnnotation(one)\nvar a;');
+        expect(() => instantiateAnnotation(node, TestAnnotation), throws);
       });
+    });
 
-      test('returns null when the member is not annotated', () {
-        expect(
-            instantiateAnnotation(
-                parseAndGetSingleMember('var a;'), TestAnnotation),
-            isNull);
-      });
+    test('annotation with both named and positional parameters', () {
+      var node =
+          parseAndGetSingleMember('@TestAnnotation(1, named: 2)\nvar a;');
+      TestAnnotation instance = instantiateAnnotation(node, TestAnnotation);
+      expect(instance.positional, 1);
+      expect(instance.named, 2);
+    });
 
-      test('returns null when the member has only non-matching annotations',
-          () {
-        expect(
-            instantiateAnnotation(
-                parseAndGetSingleMember('@NonexistantAnnotation\nvar a;'),
-                TestAnnotation),
-            isNull);
-      });
+    test('instantiates an annotation using a named constructor', () {
+      var node = parseAndGetSingleMember(
+          '@TestAnnotation.namedConstructor(namedConstructorOnly: true)\nvar a;');
+      TestAnnotation instance = instantiateAnnotation(node, TestAnnotation);
+      expect(instance.namedConstructorOnly, true);
+    });
+
+    test('throws if the annotation cannot be constructed', () {
+      var node = parseAndGetSingleMember(
+          '@TestAnnotation(1, 2, 3, 4, "way more parameters than were declared")\nvar a;');
+      expect(() {
+        instantiateAnnotation(node, TestAnnotation);
+      }, throwsA(startsWith('Unable to instantiate annotation')));
+    });
+
+    test('throws if the annotation is not used as a constructor', () {
+      var node = parseAndGetSingleMember('@TestAnnotation\nvar a;');
+      expect(() {
+        instantiateAnnotation(node, TestAnnotation);
+      }, throwsA(startsWith('Annotation not invocation of constructor')));
+    });
+
+    test('returns null when the member is not annotated', () {
+      var node = parseAndGetSingleMember('var a;');
+      expect(instantiateAnnotation(node, TestAnnotation), isNull);
+    });
+
+    test('returns null when the member has only non-matching annotations', () {
+      var node = parseAndGetSingleMember('@NonexistantAnnotation\nvar a;');
+      expect(instantiateAnnotation(node, TestAnnotation), isNull);
     });
   });
 }

@@ -7,7 +7,8 @@ import 'package:barback/barback.dart';
 
 import 'package:transformer_utils/src/node_with_meta.dart';
 
-/// Copy a class [member] declaration with [body] as a new implementation.
+/// Returns a copy of a class [member] declaration with [body] as a new
+/// implementation.
 ///
 /// Currently only supports:
 ///   * [FieldDeclaration] (single variable only)
@@ -24,7 +25,7 @@ String copyClassMember(ClassMember member, String body) {
       'Only FieldDeclaration and MethodDeclaration are supported.');
 }
 
-/// Find and return all declarations within a compilation [unit] that are
+/// Finds and returns all declarations within a compilation [unit] that are
 /// annotated with the given [annotation] class.
 ///
 /// If this is being leveraged within a transformer, you can associate the
@@ -67,8 +68,9 @@ dynamic getLiteralValue(Literal literal) {
       'Must be a string, boolean, integer, or null literal');
 }
 
-/// Uses reflection to instantiate and return the first annotation on [member]
-/// of type [annotationType], or null if no matching annotations are found.
+/// Using reflection, this instantiates and returns the first annotation on
+/// [member] of type [annotationType], or null if no matching annotations are
+/// found.
 ///
 /// Annotation constructors are currently limited to the values supported by
 /// [getLiteralValue].

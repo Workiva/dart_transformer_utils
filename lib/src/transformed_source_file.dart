@@ -114,7 +114,7 @@ class TransformedSourceFile {
         <!DOCTYPE html>
         <html>
         <head>
-          <title>web_skin_dart Transformer Diff - ${attrEscaper.convert(sourceFile.url.path)}</title>
+          <title>Transformer Diff - ${attrEscaper.convert(sourceFile.url.path)}</title>
           <style>
             .diff-unmodified {
                 color: #444;
