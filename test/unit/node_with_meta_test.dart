@@ -11,7 +11,7 @@ import '../test_utils.dart';
 void main() {
   group('NodeWithMeta', () {
     test('instantiates and provides access to an annotation and node', () {
-      var member = parseAndGetFirstMember('@TestAnnotation("hello")\nvar a;');
+      var member = parseAndGetSingleMember('@TestAnnotation("hello")\nvar a;');
       var nodeWithMeta =
           new NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member);
 
