@@ -60,8 +60,7 @@ main() {
     });
 
     test('annotation with both named and positional parameters', () {
-      var node =
-          parseAndGetFirstMember('@TestAnnotation(1, named: 2)\nvar a;');
+      var node = parseAndGetFirstMember('@TestAnnotation(1, named: 2)\nvar a;');
       TestAnnotation instance = instantiateAnnotation(node, TestAnnotation);
       expect(instance.positional, 1);
       expect(instance.named, 2);
