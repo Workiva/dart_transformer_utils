@@ -32,13 +32,11 @@ String copyClassMember(ClassMember member, String body) {
 /// returned [DeclarationWithMeta] instance with the asset in which it is
 /// located by passing in an [assetId].
 Iterable<NodeWithMeta> getDeclarationsAnnotatedBy(
-    CompilationUnit unit, annotation,
+    CompilationUnit unit, Type annotation,
     {AssetId assetId}) {
   var annotationName = _getReflectedName(annotation);
   return unit.declarations.where((member) {
-    return member.metadata
-        .where((meta) => meta.name.name == annotationName)
-        .isNotEmpty;
+    return member.metadata.any((meta) => meta.name.name == annotationName);
   }).map((member) => new NodeWithMeta(member, assetId: assetId));
 }
 

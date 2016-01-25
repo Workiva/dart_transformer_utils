@@ -53,14 +53,15 @@ main() {
       });
 
       test('an identifier', () {
-        var node = parseAndGetSingleMember(
-            '@TestAnnotation(identifier)\nvar a;');
+        var node =
+            parseAndGetSingleMember('@TestAnnotation(identifier)\nvar a;');
         expect(() => instantiateAnnotation(node, TestAnnotation), throws);
       });
     });
 
     test('annotation with both named and positional parameters', () {
-      var node = parseAndGetSingleMember('@TestAnnotation(1, named: 2)\nvar a;');
+      var node =
+          parseAndGetSingleMember('@TestAnnotation(1, named: 2)\nvar a;');
       TestAnnotation instance = instantiateAnnotation(node, TestAnnotation);
       expect(instance.positional, 1);
       expect(instance.named, 2);
