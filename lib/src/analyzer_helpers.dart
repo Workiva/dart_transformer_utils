@@ -3,6 +3,42 @@ library transformer_utils.src.analyzer_helpers;
 import 'dart:mirrors' as mirrors;
 
 import 'package:analyzer/analyzer.dart';
+import 'package:barback/barback.dart';
+
+import 'package:transformer_utils/src/node_with_meta.dart';
+
+/// Returns a copy of a class [member] declaration with [body] as a new
+/// implementation.
+///
+/// Currently only supports:
+///   * [FieldDeclaration] (single variable only)
+///   * [MethodDeclaration] (getter, setter, and methods)
+String copyClassMember(ClassMember member, String body) {
+  if (member is FieldDeclaration) return _copyFieldDeclaration(member, body);
+  if (member is MethodDeclaration) {
+    if (member.isGetter) return _copyGetterDeclaration(member, body);
+    if (member.isSetter) return _copySetterDeclaration(member, body);
+    return _copyMethodDeclaration(member, body);
+  }
+  throw new UnsupportedError(
+      'Unsupported class member type: ${member.runtimeType}. '
+      'Only FieldDeclaration and MethodDeclaration are supported.');
+}
+
+/// Finds and returns all declarations within a compilation [unit] that are
+/// annotated with the given [annotation] class.
+///
+/// If this is being leveraged within a transformer, you can associate the
+/// returned [DeclarationWithMeta] instance with the asset in which it is
+/// located by passing in an [assetId].
+Iterable<NodeWithMeta> getDeclarationsAnnotatedBy(
+    CompilationUnit unit, Type annotation,
+    {AssetId assetId}) {
+  var annotationName = _getReflectedName(annotation);
+  return unit.declarations.where((member) {
+    return member.metadata.any((meta) => meta.name.name == annotationName);
+  }).map((member) => new NodeWithMeta(member, assetId: assetId));
+}
 
 /// Given a [literal] (an AST node), this returns the literal's value.
 ///
@@ -89,6 +125,75 @@ dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType) {
         'likely due to improper usage, or a naming conflict with '
         'annotationType $annotationType. Original error: $e.';
   }
+}
+
+String _copyFieldDeclaration(FieldDeclaration decl, String initializer) {
+  var result = '';
+  if (decl.fields.type != null) {
+    result = '${decl.fields.type}';
+  } else if (decl.staticKeyword == null) {
+    result = 'var';
+  }
+  if (decl.staticKeyword != null) {
+    result = '${decl.staticKeyword} $result';
+  }
+  result = '$result ${decl.fields.variables.first.name.name}';
+  if (initializer != null && initializer.isNotEmpty) {
+    result = '$result = $initializer;';
+  } else {
+    result = '$result;';
+  }
+  return result;
+}
+
+String _copyGetterDeclaration(MethodDeclaration decl, String body) {
+  bool isAsync =
+      decl.returnType != null && decl.returnType.name.name == 'Future';
+  var result = '';
+  if (decl.returnType != null) {
+    result = '${decl.returnType} get';
+  } else {
+    result = 'get';
+  }
+  if (decl.isStatic) {
+    result = 'static $result';
+  }
+  if (isAsync) {
+    result = '$result async';
+  }
+  result = '$result ${decl.name.name} {\n$body\n  }';
+  return result;
+}
+
+String _copySetterDeclaration(MethodDeclaration decl, String body) {
+  var result = 'void set';
+  if (decl.isStatic) {
+    result = 'static $result';
+  }
+  result = '$result ${decl.name.name}${decl.parameters} {\n$body\n  }';
+  return result;
+}
+
+String _copyMethodDeclaration(MethodDeclaration decl, String body) {
+  bool isAsync =
+      decl.returnType != null && decl.returnType.name.name == 'Future';
+  var result = '${decl.name.name}';
+  if (decl.returnType != null) {
+    result = '${decl.returnType} $result';
+  }
+  if (decl.isStatic) {
+    result = 'static $result';
+  }
+  if (decl.parameters != null) {
+    result = '$result${decl.parameters}';
+  } else {
+    result = '$result()';
+  }
+  if (isAsync) {
+    result = '$result async';
+  }
+  result = '$result {\n$body\n  }';
+  return result;
 }
 
 /// Returns the name of the class being instantiated for [annotation], or null

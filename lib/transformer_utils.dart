@@ -2,6 +2,8 @@ library transformer_utils;
 
 export 'package:transformer_utils/src/analyzer_helpers.dart'
     show
+        copyClassMember,
+        getDeclarationsAnnotatedBy,
         getLiteralValue,
         instantiateAnnotation;
 export 'package:transformer_utils/src/barback_utils.dart'
