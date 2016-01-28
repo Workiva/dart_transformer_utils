@@ -23,6 +23,7 @@ class TestClass {
 
   static void set staticSetter(v) { }
   void set setter(v) { }
+  void set typedSetter(String v) { }
 
   untypedMethod() { }
   String typedMethod() { }
@@ -122,6 +123,14 @@ main() {
         var node = parseAndGetSingleMember(classDef);
         var setter = getMethodByName(node, 'setter');
         var expected = ['void set setter(v) {', 'c = "copy";', '}'].join('\n');
+        expectLines(copyClassMember(setter, 'c = "copy";'), expected);
+      });
+
+      test('copies typed setter', () {
+        var node = parseAndGetSingleMember(classDef);
+        var setter = getMethodByName(node, 'typedSetter');
+        var expected =
+            ['void set typedSetter(String v) {', 'c = "copy";', '}'].join('\n');
         expectLines(copyClassMember(setter, 'c = "copy";'), expected);
       });
 
