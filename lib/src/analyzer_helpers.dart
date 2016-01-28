@@ -3,9 +3,6 @@ library transformer_utils.src.analyzer_helpers;
 import 'dart:mirrors' as mirrors;
 
 import 'package:analyzer/analyzer.dart';
-import 'package:barback/barback.dart';
-
-import 'package:transformer_utils/src/node_with_meta.dart';
 
 /// Returns a copy of a class [member] declaration with [body] as a new
 /// implementation.
@@ -31,13 +28,12 @@ String copyClassMember(ClassMember member, String body) {
 /// If this is being leveraged within a transformer, you can associate the
 /// returned [DeclarationWithMeta] instance with the asset in which it is
 /// located by passing in an [assetId].
-Iterable<NodeWithMeta> getDeclarationsAnnotatedBy(
-    CompilationUnit unit, Type annotation,
-    {AssetId assetId}) {
+Iterable<CompilationUnitMember> getDeclarationsAnnotatedBy(
+    CompilationUnit unit, Type annotation) {
   var annotationName = _getReflectedName(annotation);
   return unit.declarations.where((member) {
     return member.metadata.any((meta) => meta.name.name == annotationName);
-  }).map((member) => new NodeWithMeta(member, assetId: assetId));
+  });
 }
 
 /// Given a [literal] (an AST node), this returns the literal's value.
@@ -158,10 +154,12 @@ String _copyGetterDeclaration(MethodDeclaration decl, String body) {
   if (decl.isStatic) {
     result = 'static $result';
   }
+
+  result = '$result ${decl.name.name}';
   if (isAsync) {
     result = '$result async';
   }
-  result = '$result ${decl.name.name} {\n$body\n  }';
+  result = '$result {\n$body\n}';
   return result;
 }
 
@@ -184,11 +182,7 @@ String _copyMethodDeclaration(MethodDeclaration decl, String body) {
   if (decl.isStatic) {
     result = 'static $result';
   }
-  if (decl.parameters != null) {
-    result = '$result${decl.parameters}';
-  } else {
-    result = '$result()';
-  }
+  result = '$result${decl.parameters}';
   if (isAsync) {
     result = '$result async';
   }
