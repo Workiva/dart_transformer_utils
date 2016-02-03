@@ -31,7 +31,7 @@ All Dart code is to be formatted by [dart_style](https://github.com/dart-lang/da
 + `*-wip` branches are the official work in progress branches for the next patch/minor/major releases.
     + __The appropriate *-wip branch should always be the base branch of any PR you create.__
         + All PRs using `master` as the base branch will be closed without merge.
-        + If you are making a change that will break backwards compatibility, stop - and __reach out to us in HipChat__ _(Room Name is "Support: UI Platform (UIP)" - hipchat://chat.workiva.atl.net/room/1300)_.
+        + If you are making a change that will break backwards compatibility, stop - and __reach out to us by opening an issue first__.
         + If there is more than one `*-wip` branch open when you are creating your feature branch, consider the scope of the changes you plan on making.
             + If you are making a change that will add some new functionality, the base branch should be the next minor release version.
                 + For example, if the current version is `2.0.0`, changes that add functionality should be based off of `2.1.0-wip`.
@@ -41,18 +41,10 @@ All Dart code is to be formatted by [dart_style](https://github.com/dart-lang/da
 
 ## Using the issue tracker
 
-The issue tracker is the preferred channel for [bug reports](#bug-reports), [feature / design pattern requests](#feature-requests) and [submitting pull requests](#pull-requests), but __please follow the guidelines:__
-
-  + __Include the JIRA ticket number__ _(If applicable)_
-    + If your issue is related to anything that will be used in a production Workiva application, you must create a ticket or sub-task in JIRA for the ticket that requires a change to dart_transformer_utils.  
-    + When you submit the issue in Github, include the JIRA ticket number in the "detailed description" portion of your commit message for proper tracking / RM compliance. _An example title is shown below:_
-    ```
-    Description of the issue
-    Ref: JIRAPROJECT-123
-    ```
+The issue tracker is the preferred channel for [bug reports](#bug-reports), [feature requests](#feature-requests) and [submitting pull requests](#pull-requests), but __please follow the guidelines:__
 
   + __Help Us Help You__
-    + Please include context relating to the urgency / timeframe for the request, and tag names (using the __@firstlast-wf__ syntax) of any key Workiva folks that need to keep track of the request as it moves through the process.
+    + Please include context relating to the urgency / timeframe for the request, and tag any key folks that need to keep track of the request as it moves through the process.
 
   + __Be Professional__
     + Please __do not__ derail or troll issues. Keep the discussion on topic and respect the opinions of others.
@@ -108,12 +100,12 @@ Adhering to the following process is the best way to get your work included in t
    and configure the remotes:
 
    ```bash
-   # Navigate to your wf workspaces location
-   cd ~/workspaces/wf
+   # Navigate to your workspaces location
+   cd ~/workspaces
    # Clone your fork of the repo into the current directory
    git clone https://github.com/<your-username>/dart_transformer_utils
    # Navigate to the newly cloned directory
-   cd ~/workspaces/wf/dart_transformer_utils
+   cd ~/workspaces/dart_transformer_utils
    # Assign the repo you forked from to a remote called "upstream"
    git remote add upstream https://github.com/Workiva/dart_transformer_utils
    ```
@@ -157,7 +149,6 @@ Below you will find an example commit message that follows the guidelines we wou
 ```
 Capitalized, short (50 chars or less) summary
 
-+ Ref: JIRAPROJECT-123
 + More detailed explanatory text, if necessary.  Wrap it to about 72
 characters or so.  In some contexts, the first line is treated as the
 subject of an email and the rest of the text as the body.  The blank
