@@ -59,7 +59,8 @@ class NodeWithMeta<TNode extends AnnotatedNode, TMeta> {
   TMeta get meta {
     if (isIncomplete) {
       throw new StateError(
-          'Metadata is incomplete; unsupported arguments $unsupportedArguments. Use `incompleteMeta` instead.');
+          'Metadata is incomplete; unsupported arguments $unsupportedArguments. '
+          'Use `potentiallyIncompleteMeta` instead.');
     }
     return _meta;
   }
