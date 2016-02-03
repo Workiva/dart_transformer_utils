@@ -1,5 +1,16 @@
 name: transformer_utils
 version: 0.0.0
+description: Utilities relating to code generation, Dart analyzer, logging, etc. for use in Pub transformers.
+authors:
+  - Workiva UI Platform Team <uip@workiva.com>
+  - Aaron Lademann <aaron.lademann@workiva.com>
+  - Claire Sarsam <claire.sarsam@workiva.com>
+  - Diana Chen <diana.chen@workiva.com>
+  - Evan Weible (Client Platform Team) <evan.weible@workiva.com>
+  - Greg Littlefield <greg.littlefield@workiva.com>
+  - Jace Hensley <jace.hensley@workiva.com>
+  - Joel Leibow <joel.leibow@workiva.com>
+homepage: https://github.com/Workiva/dart_transformer_utils
 dependencies:
   analyzer: "^0.27.0"
   barback: "^0.15.0"
