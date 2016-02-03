@@ -3,14 +3,13 @@
 Looking to contribute something? __Here's how you can help.__
 
 + __[Coding Standards](#coding-standards)__
-  + [Formatting](#general-formatting-guidelines)
+  + [Formatting](#formatting)
 + __[Key Branches](#key-branches)__
 + __[Using the Issue Tracker](#using-the-issue-tracker)__
   + [Reporting Bugs](#bug-reports)
   + [Feature Requests](#feature-requests)
   + [Submitting Pull Requests](#pull-requests)
 + __[Commit Message Standards](#git-commit-message-standards)__
-+ __[Testing Standards](#component-testing-standards)__
 
 ---
 
@@ -37,7 +36,7 @@ All Dart code is to be formatted by [dart_style](https://github.com/dart-lang/da
             + If you are making a change that will add some new functionality, the base branch should be the next minor release version.
                 + For example, if the current version is `2.0.0`, changes that add functionality should be based off of `2.1.0-wip`.
             + If you are making a change that will not add any new functionality, merely fix a bug, etc, the base branch should be the next patch release version.
-                + For example, if the current version is `2.0.0`, changes that add functionality should be based off of `2.0.1-wip`.
+                + For example, if the current version is `2.0.0`, fixes that don't add anything should be based off of `2.0.1-wip`.
 
 
 ## Using the issue tracker
