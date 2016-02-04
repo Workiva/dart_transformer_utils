@@ -272,18 +272,60 @@ main() {
     group('throws when an annotation parameter value is unsupported:', () {
       test('a constant expression', () {
         var node = parseAndGetSingleMember('@TestAnnotation(const [])\nvar a;');
-        expect(() => instantiateAnnotation(node, TestAnnotation), throws);
+        expect(() => instantiateAnnotation(node, TestAnnotation),
+            throwsUnsupportedError);
       });
 
       test('an interpolated String', () {
         var node = parseAndGetSingleMember('@TestAnnotation("\$v")\nvar a;');
-        expect(() => instantiateAnnotation(node, TestAnnotation), throws);
+        expect(() => instantiateAnnotation(node, TestAnnotation),
+            throwsUnsupportedError);
       });
 
       test('an identifier', () {
         var node =
             parseAndGetSingleMember('@TestAnnotation(identifier)\nvar a;');
-        expect(() => instantiateAnnotation(node, TestAnnotation), throws);
+        expect(() => instantiateAnnotation(node, TestAnnotation),
+            throwsUnsupportedError);
+      });
+
+      group('(except when `onUnsupportedArgument` is specified)', () {
+        test('positional parameter', () {
+          Expression unsupportedArgument;
+
+          TestAnnotation instance = instantiateAnnotation(
+              parseAndGetSingleMember('@TestAnnotation(const [])\nvar a;'),
+              TestAnnotation, onUnsupportedArgument: (Expression expression) {
+            unsupportedArgument = expression;
+            return 'value to be passed to constructor instead';
+          });
+
+          expect(unsupportedArgument, const isInstanceOf<Expression>());
+          expect(instance.positional,
+              equals('value to be passed to constructor instead'),
+              reason:
+                  'should have passed the return value of `onUnsupportedArgument` to the constructor');
+        });
+
+        test('named parameter', () {
+          Expression unsupportedArgument;
+
+          TestAnnotation instance = instantiateAnnotation(
+              parseAndGetSingleMember(
+                  '@TestAnnotation.namedConstructor(namedConstructorOnly: const [])\nvar a;'),
+              TestAnnotation, onUnsupportedArgument: (Expression expression) {
+            unsupportedArgument = expression;
+            return 'value to be passed to constructor instead';
+          });
+
+          expect(unsupportedArgument, const isInstanceOf<NamedExpression>());
+          expect((unsupportedArgument as NamedExpression).name.label.name,
+              equals('namedConstructorOnly'));
+          expect(instance.namedConstructorOnly,
+              equals('value to be passed to constructor instead'),
+              reason:
+                  'should have passed the return value of `onUnsupportedArgument` to the constructor');
+        });
       });
     });
 
@@ -324,6 +366,11 @@ main() {
 
     test('returns null when the member has only non-matching annotations', () {
       var node = parseAndGetSingleMember('@NonexistantAnnotation\nvar a;');
+      expect(instantiateAnnotation(node, TestAnnotation), isNull);
+    });
+
+    test('returns null when the member has no annotations', () {
+      var node = parseAndGetSingleMember('var a;');
       expect(instantiateAnnotation(node, TestAnnotation), isNull);
     });
   });

@@ -50,50 +50,63 @@ Iterable<CompilationUnitMember> getDeclarationsAnnotatedBy(
   });
 }
 
-/// Given a [literal] (an AST node), this returns the literal's value.
+/// Returns the value of the specified [expression] AST node if it represents a literal.
+///
+/// For non-literal nodes, the return value will be the result of calling [onUnsupportedExpression] with [expression].
+///
+/// If [onUnsupportedExpression] isn't specified, an [UnsupportedError] will be thrown.
 ///
 /// Currently only supports:
 ///   * [StringLiteral]
 ///   * [BooleanLiteral]
 ///   * [IntegerLiteral]
 ///   * [NullLiteral]
-dynamic getLiteralValue(Literal literal) {
-  if (literal is StringLiteral) {
-    var value = literal.stringValue;
-    if (value == null)
-      throw new UnsupportedError('Unsupported literal: $literal. '
-          'Must be a non-interpolated string.');
-    return value;
-  } else if (literal is BooleanLiteral) {
-    return literal.value;
-  } else if (literal is IntegerLiteral) {
-    return literal.value;
-  } else if (literal is NullLiteral) {
+dynamic getValue(Expression expression,
+    {dynamic onUnsupportedExpression(Expression expression)}) {
+  if (expression is StringLiteral) {
+    var value = expression.stringValue;
+    if (value != null) {
+      return value;
+    }
+  } else if (expression is BooleanLiteral) {
+    return expression.value;
+  } else if (expression is IntegerLiteral) {
+    return expression.value;
+  } else if (expression is NullLiteral) {
     return null;
   }
 
-  throw new UnsupportedError('Unsupported literal: $literal.'
-      'Must be a string, boolean, integer, or null literal');
+  if (onUnsupportedExpression != null) {
+    return onUnsupportedExpression(expression);
+  }
+
+  throw new UnsupportedError('Unsupported expression: $expression. '
+      'Must be a uninterpolated string, boolean, integer, or null literal.');
 }
 
-/// Using reflection, this instantiates and returns the first annotation on
-/// [member] of type [annotationType], or null if no matching annotations are
-/// found.
-///
-/// Annotation constructors are currently limited to the values supported by
-/// [getLiteralValue].
-///
-/// Naively assumes that the name of the [annotationType] class is canonical.
-dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType) {
+/// Returns the first annotation AST node on [member] of type [annotationType],
+/// or null if no matching annotations are found.
+Annotation getMatchingAnnotation(AnnotatedNode member, Type annotationType) {
   // Be sure to use `originalDeclaration` so that generic parameters work.
   mirrors.ClassMirror classMirror =
       mirrors.reflectClass(annotationType).originalDeclaration;
   String className = mirrors.MirrorSystem.getName(classMirror.simpleName);
 
   // Find the annotation that matches [type]'s name.
-  Annotation matchingAnnotation = member.metadata.firstWhere((annotation) {
+  return member.metadata.firstWhere((annotation) {
     return _getClassName(annotation) == className;
   }, orElse: () => null);
+}
+
+/// Uses reflection to instantiate and returns the first annotation on [member] of type
+/// [annotationType], or null if no matching annotations are found.
+///
+/// Annotation constructors are currently limited to the values supported by [getValue].
+///
+/// Naively assumes that the name of the [annotationType] class is canonical.
+dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType,
+    {dynamic onUnsupportedArgument(Expression argument)}) {
+  var matchingAnnotation = getMatchingAnnotation(member, annotationType);
 
   // If no annotation is found, return null.
   if (matchingAnnotation == null) {
@@ -110,14 +123,20 @@ dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType) {
   Map namedParameters = {};
   List positionalParameters = [];
 
-  matchingAnnotation.arguments.arguments.forEach((expression) {
-    if (expression is NamedExpression) {
-      var name = (expression as NamedExpression).name.label.name;
-      var value = getLiteralValue((expression as NamedExpression).expression);
+  matchingAnnotation.arguments.arguments.forEach((argument) {
+    var onUnsupportedExpression = onUnsupportedArgument == null
+        ? null
+        : (_) => onUnsupportedArgument(argument);
+
+    if (argument is NamedExpression) {
+      var name = argument.name.label.name;
+      var value = getValue(argument.expression,
+          onUnsupportedExpression: onUnsupportedExpression);
 
       namedParameters[new Symbol(name)] = value;
     } else {
-      var value = getLiteralValue(expression);
+      var value =
+          getValue(argument, onUnsupportedExpression: onUnsupportedExpression);
 
       positionalParameters.add(value);
     }
@@ -125,6 +144,10 @@ dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType) {
 
   // Instantiate and return an instance of the annotation using reflection.
   String constructorName = _getConstructorName(matchingAnnotation) ?? '';
+
+  // Be sure to use `originalDeclaration` so that generic parameters work.
+  mirrors.ClassMirror classMirror =
+      mirrors.reflectClass(annotationType).originalDeclaration;
 
   try {
     var instanceMirror = classMirror.newInstance(
