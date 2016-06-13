@@ -15,10 +15,7 @@
 library transformer_utils;
 
 export 'package:transformer_utils/src/analyzer_helpers.dart'
-    show
-        copyClassMember,
-        getDeclarationsAnnotatedBy,
-        instantiateAnnotation;
+    show copyClassMember, getDeclarationsAnnotatedBy, instantiateAnnotation;
 export 'package:transformer_utils/src/barback_utils.dart'
     show assetIdToPackageUri, getSpanForNode;
 export 'package:transformer_utils/src/jet_brains_friendly_logger.dart'
