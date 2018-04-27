@@ -8,7 +8,7 @@ authors:
   - Evan Weible <evan.weible@workiva.com>
 homepage: https://github.com/Workiva/dart_transformer_utils
 dependencies:
-  analyzer: ">=0.27.0 <0.31.0"
+  analyzer: ^0.30.0+4
   barback: "^0.15.0"
   path: "^1.3.0"
   source_span: "^1.2.0"
