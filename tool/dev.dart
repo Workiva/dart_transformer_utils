@@ -23,7 +23,7 @@ main(List<String> args) async {
 
   config.analyze.entryPoints = ['lib/', 'test/', 'test/unit/', 'tool/'];
   config.copyLicense.directories = directories;
-  config.format.directories = directories;
+  config.format.paths = directories;
   config.test.unitTests = ['test/unit/'];
 
   await dev(args);

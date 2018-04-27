@@ -27,7 +27,7 @@ main() {
 
     setUp(() {
       testSourceFile =
-          new SourceFile('0123456789', url: 'test_source_file.dart');
+          new SourceFile.fromString('0123456789', url: 'test_source_file.dart');
       transformedFile = new TransformedSourceFile(testSourceFile);
     });
 
@@ -73,7 +73,7 @@ main() {
       SourceSpan lines1Through3Span;
 
       setUp(() {
-        testSourceFile = new SourceFile(text);
+        testSourceFile = new SourceFile.fromString(text);
         transformedFile = new TransformedSourceFile(testSourceFile);
 
         var lines1Through3 = '\nline 1\nline 2\nline 3'.allMatches(text).single;
@@ -214,7 +214,7 @@ main() {
     AnnotatedNode node;
 
     setUp(() {
-      sourceFile = new SourceFile(source);
+      sourceFile = new SourceFile.fromString(source);
       node = parseCompilationUnit(source).declarations.single;
     });
 
