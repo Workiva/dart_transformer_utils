@@ -1,3 +1,4 @@
+# Dart 1.24.2
 FROM drydock-prod.workiva.net/workiva/smithy-runner-generator:179735 as build
 
 # Build Environment Vars
