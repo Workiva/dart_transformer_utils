@@ -180,7 +180,8 @@ String _copyFieldDeclaration(FieldDeclaration decl, String initializer) {
 }
 
 String _copyGetterDeclaration(MethodDeclaration decl, String body) {
-  bool isAsync = (decl.returnType?.type?.name ?? decl.returnType?.toString()) == 'Future';
+  bool isAsync =
+      (decl.returnType?.type?.name ?? decl.returnType?.toString()) == 'Future';
   var result = '';
   if (decl.returnType != null) {
     result = '${decl.returnType} get';
@@ -209,7 +210,8 @@ String _copySetterDeclaration(MethodDeclaration decl, String body) {
 }
 
 String _copyMethodDeclaration(MethodDeclaration decl, String body) {
-  bool isAsync = (decl.returnType?.type?.name ?? decl.returnType?.toString()) == 'Future';
+  bool isAsync =
+      (decl.returnType?.type?.name ?? decl.returnType?.toString()) == 'Future';
   var result = '${decl.name.name}';
   if (decl.returnType != null) {
     result = '${decl.returnType} $result';

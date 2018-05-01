@@ -34,7 +34,8 @@ main() {
     group('clickableReference()', () {
       test('returns a properly-formatted reference to a source span', () {
         var lines = ['line 1', 'line 2 TARGET', 'line 3'];
-        var sourceFile = new SourceFile.fromString(lines.join('\n'), url: 'source_url');
+        var sourceFile =
+            new SourceFile.fromString(lines.join('\n'), url: 'source_url');
         var span = sourceFile.span(sourceFile.getText(0).indexOf('TARGET'));
         var formatted = JetBrainsFriendlyLogger.clickableReference(span);
         expect(formatted, '[source_url 2:8]: ');
@@ -48,7 +49,8 @@ main() {
     group('highlightedSpanText()', () {
       test('returns the highlighted text of a source span', () {
         var lines = ['line 1', 'line 2 TARGET', 'line 3'];
-        var sourceFile = new SourceFile.fromString(lines.join('\n'), url: 'source_url');
+        var sourceFile =
+            new SourceFile.fromString(lines.join('\n'), url: 'source_url');
         int targetIndex = sourceFile.getText(0).indexOf('TARGET');
         var span = sourceFile.span(targetIndex, targetIndex + 'TARGET'.length);
         expect(span.text, 'TARGET',
