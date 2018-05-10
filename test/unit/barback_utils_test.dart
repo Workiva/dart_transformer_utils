@@ -47,7 +47,7 @@ void main() {
 
   group('getSpanForNode()', () {
     test('should get node but skip comment and meta by default', () {
-      var sourceFile = new SourceFile(sourceFileText);
+      var sourceFile = new SourceFile.fromString(sourceFileText);
       var unit = parseCompilationUnit(sourceFileText);
       var annotatedNode = unit.childEntities.last as AstNode;
       var span = getSpanForNode(sourceFile, annotatedNode);
@@ -55,7 +55,7 @@ void main() {
     });
 
     test('should not skip comment and meta if skip is false', () {
-      var sourceFile = new SourceFile(sourceFileText);
+      var sourceFile = new SourceFile.fromString(sourceFileText);
       var unit = parseCompilationUnit(sourceFileText);
       var annotatedNode = unit.childEntities.last as AstNode;
       var span = getSpanForNode(sourceFile, annotatedNode,
@@ -70,7 +70,7 @@ void main() {
     });
 
     test('should return the whole span if the node is not annotated', () {
-      var sourceFile = new SourceFile(sourceFileText);
+      var sourceFile = new SourceFile.fromString(sourceFileText);
       var unit = parseCompilationUnit(sourceFileText);
       var plainNode = unit.childEntities.first as AstNode;
       var span = getSpanForNode(sourceFile, plainNode);
