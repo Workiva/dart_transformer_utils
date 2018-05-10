@@ -14,9 +14,10 @@
 
 library transformer_utils.src.transformed_source_file;
 
-import 'dart:convert';
+import 'dart:convert' hide HtmlEscapeMode;
 
 import 'package:analyzer/analyzer.dart';
+import 'package:dart2_constant/convert.dart';
 import 'package:source_span/source_span.dart';
 
 /// A record used internally by [TransformedSourceFile] that represents the
@@ -108,8 +109,8 @@ class TransformedSourceFile {
   }
 
   String getHtmlDiff() {
-    const HtmlEscape elementEscaper = const HtmlEscape(HtmlEscapeMode.ELEMENT);
-    const HtmlEscape attrEscaper = const HtmlEscape(HtmlEscapeMode.ATTRIBUTE);
+    const HtmlEscape elementEscaper = const HtmlEscape(HtmlEscapeMode.element);
+    const HtmlEscape attrEscaper = const HtmlEscape(HtmlEscapeMode.attribute);
 
     StringBuffer diff = new StringBuffer();
 
