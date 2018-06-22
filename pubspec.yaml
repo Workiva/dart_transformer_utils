@@ -14,12 +14,22 @@ dependencies:
   source_span: "^1.2.0"
 
 dev_dependencies:
+  abide:
+    hosted:
+      name: abide
+      url: https://pub.workiva.org
+    version: ^1.4.1
   coverage: ^0.10.0 # 0.11.0+ is Dart 2 only
   dart_dev: ^1.9.2
   dart_style: ^1.0.9
   dependency_validator: ^1.1.0
   mockito: ^2.0.0
   test: ^0.12.32+1
+  semver_audit:
+    hosted:
+      name: semver_audit
+      url: https://pub.workiva.org
+    version: ^1.4.2
 
 environment:
     sdk: ">=1.24.2 <2.0.0"
