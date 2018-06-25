@@ -17,7 +17,9 @@ ADD . /build/
 RUN echo "Starting the script sections" && \
 		dart --version && \
 		timeout 5m pub get && \
-		pub run dependency_validator -i coverage,dart_style && \
+		pub run abide && \
+		pub run dependency_validator -i abide,coverage,dart_style,semver_audit && \
+		pub run semver_audit report --repo Workiva/dart_transformer_utils && \
 		echo "Script sections completed"
 ARG BUILD_ARTIFACTS_DART-DEPENDENCIES=/build/pubspec.lock
 FROM scratch
