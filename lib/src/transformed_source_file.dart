@@ -18,6 +18,8 @@ import 'dart:convert';
 
 import 'package:analyzer/analyzer.dart';
 import 'package:source_span/source_span.dart';
+import 'package:dart2_constant/convert.dart' as convert;
+
 
 /// A record used internally by [TransformedSourceFile] that represents the
 /// replacement of a [SourceSpan] with a string of text.
@@ -108,8 +110,8 @@ class TransformedSourceFile {
   }
 
   String getHtmlDiff() {
-    const HtmlEscape elementEscaper = const HtmlEscape(HtmlEscapeMode.ELEMENT);
-    const HtmlEscape attrEscaper = const HtmlEscape(HtmlEscapeMode.ATTRIBUTE);
+    const HtmlEscape elementEscaper = const HtmlEscape(convert.HtmlEscapeMode.element);
+    const HtmlEscape attrEscaper = const HtmlEscape(convert.HtmlEscapeMode.attribute);
 
     StringBuffer diff = new StringBuffer();
 
