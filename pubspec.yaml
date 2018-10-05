@@ -1,5 +1,5 @@
 name: transformer_utils
-version: 0.1.4
+version: 0.1.5
 description: Utilities relating to code generation, Dart analyzer, logging, etc. for use in Pub transformers.
 authors:
   - Workiva UI Platform Team <uip@workiva.com>
@@ -15,7 +15,7 @@ dependencies:
   dart2_constant: ^1.0.1
 
 dev_dependencies:
-  coverage: ^0.10.0 # 0.11.0+ is Dart 2 only
+  coverage: ">=0.10.0 <0.13.0"
   dart_dev: ^1.9.2
   dart_style: ^1.0.9
   dependency_validator: ^1.1.0
