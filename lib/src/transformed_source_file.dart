@@ -20,7 +20,6 @@ import 'package:analyzer/analyzer.dart';
 import 'package:dart2_constant/convert.dart' as convert_constant;
 import 'package:source_span/source_span.dart';
 
-
 /// A record used internally by [TransformedSourceFile] that represents the
 /// replacement of a [SourceSpan] with a string of text.
 class _Replacement {
