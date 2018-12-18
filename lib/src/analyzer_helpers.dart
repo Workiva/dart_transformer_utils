@@ -120,7 +120,7 @@ dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType,
   }
 
   // Get the parameters from the annotation's AST.
-  Map namedParameters = {};
+  Map<Symbol, dynamic> namedParameters = {};
   List positionalParameters = [];
 
   matchingAnnotation.arguments.arguments.forEach((argument) {
@@ -153,10 +153,10 @@ dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType,
     var instanceMirror = classMirror.newInstance(
         new Symbol(constructorName), positionalParameters, namedParameters);
     return instanceMirror.reflectee;
-  } catch (e) {
+  } catch (e, stacktrace) {
     throw 'Unable to instantiate annotation: $matchingAnnotation. This is '
         'likely due to improper usage, or a naming conflict with '
-        'annotationType $annotationType. Original error: $e.';
+        'annotationType $annotationType. Original error: $e. Stacktrace: $stacktrace';
   }
 }
 

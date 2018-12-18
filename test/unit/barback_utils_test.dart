@@ -16,7 +16,7 @@
 library transformer_utils.test.unit.barback_utils_test;
 
 import 'package:analyzer/analyzer.dart';
-import 'package:barback/barback.dart';
+import 'package:build/build.dart';
 import 'package:source_span/source_span.dart';
 import 'package:test/test.dart';
 

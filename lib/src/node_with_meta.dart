@@ -15,7 +15,7 @@
 library transformer_utils.src.node_with_meta;
 
 import 'package:analyzer/analyzer.dart';
-import 'package:barback/barback.dart';
+import 'package:build/build.dart';
 
 import 'package:transformer_utils/src/analyzer_helpers.dart';
 
