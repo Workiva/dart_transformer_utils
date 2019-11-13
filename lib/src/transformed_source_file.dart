@@ -108,10 +108,8 @@ class TransformedSourceFile {
   }
 
   String getHtmlDiff() {
-    const HtmlEscape elementEscaper =
-        const HtmlEscape(HtmlEscapeMode.element);
-    const HtmlEscape attrEscaper =
-        const HtmlEscape(HtmlEscapeMode.attribute);
+    const HtmlEscape elementEscaper = const HtmlEscape(HtmlEscapeMode.element);
+    const HtmlEscape attrEscaper = const HtmlEscape(HtmlEscapeMode.attribute);
 
     StringBuffer diff = new StringBuffer();
 
