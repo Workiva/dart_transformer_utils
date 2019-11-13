@@ -17,7 +17,6 @@ library transformer_utils.src.transformed_source_file;
 import 'dart:convert';
 
 import 'package:analyzer/analyzer.dart';
-import 'package:dart2_constant/convert.dart' as convert_constant;
 import 'package:source_span/source_span.dart';
 
 /// A record used internally by [TransformedSourceFile] that represents the
@@ -110,9 +109,9 @@ class TransformedSourceFile {
 
   String getHtmlDiff() {
     const HtmlEscape elementEscaper =
-        const HtmlEscape(convert_constant.HtmlEscapeMode.element);
+        const HtmlEscape(HtmlEscapeMode.element);
     const HtmlEscape attrEscaper =
-        const HtmlEscape(convert_constant.HtmlEscapeMode.attribute);
+        const HtmlEscape(HtmlEscapeMode.attribute);
 
     StringBuffer diff = new StringBuffer();
 
