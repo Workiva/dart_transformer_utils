@@ -34,7 +34,7 @@ Uri assetIdToPackageUri(AssetId id) {
 /// [node]. The preceding comment and metadata will be excluded if
 /// [skipCommentAndMetadata] is true.
 SourceSpan getSpanForNode(SourceFile sourceFile, AstNode node,
-    {bool skipCommentAndMetadata: true}) {
+    {bool skipCommentAndMetadata = true}) {
   if (skipCommentAndMetadata && node is AnnotatedNode) {
     return sourceFile.span(
         node.firstTokenAfterCommentAndMetadata.offset, node.end);

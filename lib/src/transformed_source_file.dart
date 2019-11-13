@@ -50,7 +50,7 @@ class TransformedSourceFile {
     _replacements.add(new _Replacement(location.pointSpan(), text));
   }
 
-  void remove(SourceSpan span, {bool preserveNewlines: false}) {
+  void remove(SourceSpan span, {bool preserveNewlines = false}) {
     String replacement;
     if (preserveNewlines) {
       replacement = '\n' * '\n'.allMatches(span.text).length;
@@ -155,7 +155,7 @@ class TransformedSourceFile {
 }
 
 SourceSpan getSpan(SourceFile sourceFile, AstNode node,
-    {bool skipCommentAndMetadata: true}) {
+    {bool skipCommentAndMetadata = true}) {
   if (skipCommentAndMetadata && node is AnnotatedNode) {
     return sourceFile.span(
         node.firstTokenAfterCommentAndMetadata.offset, node.end);
