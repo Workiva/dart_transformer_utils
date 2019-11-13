@@ -73,7 +73,7 @@ String stringLiteral(String content,
 
   int quoteChar = useSingleQuote ? SINGLE_QUOTE : DOUBLE_QUOTE;
 
-  var buffer = new StringBuffer();
+  var buffer = StringBuffer();
 
   void writeStringSlice(String string, int start, int end) {
     buffer.write(string.substring(start, end));

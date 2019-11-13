@@ -43,11 +43,11 @@ class TransformedSourceFile {
   bool get isModified => _replacements.isNotEmpty;
 
   void replace(SourceSpan span, String text) {
-    _replacements.add(new _Replacement(span, text));
+    _replacements.add(_Replacement(span, text));
   }
 
   void insert(SourceLocation location, String text) {
-    _replacements.add(new _Replacement(location.pointSpan(), text));
+    _replacements.add(_Replacement(location.pointSpan(), text));
   }
 
   void remove(SourceSpan span, {bool preserveNewlines = false}) {
@@ -58,7 +58,7 @@ class TransformedSourceFile {
       replacement = '';
     }
 
-    _replacements.add(new _Replacement(span, replacement));
+    _replacements.add(_Replacement(span, replacement));
   }
 
   void iterateReplacements(
@@ -98,7 +98,7 @@ class TransformedSourceFile {
   }
 
   String getTransformedText() {
-    StringBuffer transformedSource = new StringBuffer();
+    StringBuffer transformedSource = StringBuffer();
 
     iterateReplacements(
         onUnmodified: transformedSource.write,
@@ -111,7 +111,7 @@ class TransformedSourceFile {
     const HtmlEscape elementEscaper = HtmlEscape(HtmlEscapeMode.element);
     const HtmlEscape attrEscaper = HtmlEscape(HtmlEscapeMode.attribute);
 
-    StringBuffer diff = new StringBuffer();
+    StringBuffer diff = StringBuffer();
 
     void writeDiff(String source, String className) {
       diff.write('<span class="$className">');

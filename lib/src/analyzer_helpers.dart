@@ -31,7 +31,7 @@ String copyClassMember(ClassMember member, String body) {
     if (member.isSetter) return _copySetterDeclaration(member, body);
     return _copyMethodDeclaration(member, body);
   }
-  throw new UnsupportedError(
+  throw UnsupportedError(
       'Unsupported class member type: ${member.runtimeType}. '
       'Only FieldDeclaration and MethodDeclaration are supported.');
 }
@@ -80,7 +80,7 @@ dynamic getValue(Expression expression,
     return onUnsupportedExpression(expression);
   }
 
-  throw new UnsupportedError('Unsupported expression: $expression. '
+  throw UnsupportedError('Unsupported expression: $expression. '
       'Must be a uninterpolated string, boolean, integer, or null literal.');
 }
 
@@ -133,7 +133,7 @@ dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType,
       var value = getValue(argument.expression,
           onUnsupportedExpression: onUnsupportedExpression);
 
-      namedParameters[new Symbol(name)] = value;
+      namedParameters[Symbol(name)] = value;
     } else {
       var value =
           getValue(argument, onUnsupportedExpression: onUnsupportedExpression);
@@ -151,7 +151,7 @@ dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType,
 
   try {
     var instanceMirror = classMirror.newInstance(
-        new Symbol(constructorName), positionalParameters, namedParameters);
+        Symbol(constructorName), positionalParameters, namedParameters);
     return instanceMirror.reflectee;
   } catch (e, stacktrace) {
     throw 'Unable to instantiate annotation: $matchingAnnotation. This is '

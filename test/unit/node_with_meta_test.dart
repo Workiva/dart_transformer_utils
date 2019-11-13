@@ -27,7 +27,7 @@ void main() {
     test('instantiates and provides access to an annotation and node', () {
       var member = parseAndGetSingleMember('@TestAnnotation("hello")\nvar a;');
       var nodeWithMeta =
-          new NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member);
+          NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member);
 
       expect(nodeWithMeta.node, same(member));
       expect(nodeWithMeta.metaNode, isNotNull);
@@ -40,7 +40,7 @@ void main() {
       var member = parseAndGetSingleMember(
           '@TestAnnotation(someIdentifier, named: "hello")\nvar a;');
       var nodeWithMeta =
-          new NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member);
+          NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member);
 
       expect(nodeWithMeta.node, same(member));
       expect(nodeWithMeta.metaNode, isNotNull);
@@ -62,7 +62,7 @@ void main() {
     test('gracefully handles a node without an annotation', () {
       var member = parseAndGetSingleMember('var a;');
       var nodeWithMeta =
-          new NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member);
+          NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member);
 
       expect(nodeWithMeta.node, same(member));
       expect(nodeWithMeta.metaNode, isNull);

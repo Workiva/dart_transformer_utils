@@ -27,8 +27,8 @@ main() {
 
     setUp(() {
       testSourceFile =
-          new SourceFile.fromString('0123456789', url: 'test_source_file.dart');
-      transformedFile = new TransformedSourceFile(testSourceFile);
+          SourceFile.fromString('0123456789', url: 'test_source_file.dart');
+      transformedFile = TransformedSourceFile(testSourceFile);
     });
 
     group('replace()', () {
@@ -73,8 +73,8 @@ main() {
       SourceSpan lines1Through3Span;
 
       setUp(() {
-        testSourceFile = new SourceFile.fromString(text);
-        transformedFile = new TransformedSourceFile(testSourceFile);
+        testSourceFile = SourceFile.fromString(text);
+        transformedFile = TransformedSourceFile(testSourceFile);
 
         var lines1Through3 = '\nline 1\nline 2\nline 3'.allMatches(text).single;
         lines1Through3Span =
@@ -177,7 +177,7 @@ main() {
 
         var html = transformedFile.getHtmlDiff();
 
-        expect(html, matches(new RegExp(r'^\s*<\!DOCTYPE html>\s*<html>')));
+        expect(html, matches(RegExp(r'^\s*<\!DOCTYPE html>\s*<html>')));
         expect(
             html,
             contains('<title>Transformer Diff - '
@@ -199,7 +199,7 @@ main() {
                 '<span class="diff-removal">8</span>'
                 '<span class="diff-unmodified">9</span>'
                 '</pre>'));
-        expect(html, matches(new RegExp(r'</html>\s*$')));
+        expect(html, matches(RegExp(r'</html>\s*$')));
       });
     });
   });
@@ -214,7 +214,7 @@ main() {
     AnnotatedNode node;
 
     setUp(() {
-      sourceFile = new SourceFile.fromString(source);
+      sourceFile = SourceFile.fromString(source);
       node = parseCompilationUnit(source).declarations.single;
     });
 

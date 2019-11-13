@@ -24,8 +24,8 @@ import 'package:source_span/source_span.dart';
 /// This will return a schemeless URI if [id] doesn't represent a library in
 /// `lib/`.
 Uri assetIdToPackageUri(AssetId id) {
-  if (!id.path.startsWith('lib/')) return new Uri(path: id.path);
-  return new Uri(
+  if (!id.path.startsWith('lib/')) return Uri(path: id.path);
+  return Uri(
       scheme: 'package',
       path: path.url.join(id.package, id.path.replaceFirst('lib/', '')));
 }
