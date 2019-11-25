@@ -1,4 +1,4 @@
-// Copyright 2015 Workiva Inc.
+// Copyright 2019 Workiva Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,19 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-library tool.dev;
+import 'package:dart_dev/dart_dev.dart';
 
-import 'package:dart_dev/dart_dev.dart' show dev, config;
-
-main(List<String> args) async {
-  // https://github.com/Workiva/dart_dev
-
-  List<String> directories = ['lib/', 'test/', 'tool/'];
-
-  config.analyze.entryPoints = ['lib/', 'test/', 'test/unit/', 'tool/'];
-  config.copyLicense.directories = directories;
-  config.format.paths = directories;
-  config.test.unitTests = ['test/unit/'];
-
-  await dev(args);
-}
+final Map<String, DevTool> config = coreConfig;
