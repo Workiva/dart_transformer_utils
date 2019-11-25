@@ -1,7 +1,6 @@
-FROM google/dart:2.1.0
-
+FROM drydock-prod.workiva.net/workiva/dart2_base_image:1
 WORKDIR /build/
 COPY . /build
-RUN timeout 5m pub get && pub run dependency_validator -i coverage,dart_style
-ARG BUILD_ARTIFACTS_AUDIT=/build/pubspec.lock
+RUN pub get
+RUN pub run dependency_validator
 FROM scratch
