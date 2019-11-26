@@ -20,7 +20,7 @@ library transformer_utils.src.text_util;
 /// If [content] is null, a string version of the the `null` literal will be
 /// returned instead.
 String stringLiteral(String content,
-    {bool quote: true, bool useSingleQuote: true}) {
+    {bool quote = true, bool useSingleQuote = true}) {
   // Adapted from dart.convert library's JSON encoder:
   // https://github.com/dart-lang/sdk/blob/1.12.0/sdk/lib/convert/json.dart#L565
   //
@@ -73,7 +73,7 @@ String stringLiteral(String content,
 
   int quoteChar = useSingleQuote ? SINGLE_QUOTE : DOUBLE_QUOTE;
 
-  var buffer = new StringBuffer();
+  var buffer = StringBuffer();
 
   void writeStringSlice(String string, int start, int end) {
     buffer.write(string.substring(start, end));

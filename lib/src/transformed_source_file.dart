@@ -17,7 +17,6 @@ library transformer_utils.src.transformed_source_file;
 import 'dart:convert';
 
 import 'package:analyzer/analyzer.dart';
-import 'package:dart2_constant/convert.dart' as convert_constant;
 import 'package:source_span/source_span.dart';
 
 /// A record used internally by [TransformedSourceFile] that represents the
@@ -44,14 +43,14 @@ class TransformedSourceFile {
   bool get isModified => _replacements.isNotEmpty;
 
   void replace(SourceSpan span, String text) {
-    _replacements.add(new _Replacement(span, text));
+    _replacements.add(_Replacement(span, text));
   }
 
   void insert(SourceLocation location, String text) {
-    _replacements.add(new _Replacement(location.pointSpan(), text));
+    _replacements.add(_Replacement(location.pointSpan(), text));
   }
 
-  void remove(SourceSpan span, {bool preserveNewlines: false}) {
+  void remove(SourceSpan span, {bool preserveNewlines = false}) {
     String replacement;
     if (preserveNewlines) {
       replacement = '\n' * '\n'.allMatches(span.text).length;
@@ -59,7 +58,7 @@ class TransformedSourceFile {
       replacement = '';
     }
 
-    _replacements.add(new _Replacement(span, replacement));
+    _replacements.add(_Replacement(span, replacement));
   }
 
   void iterateReplacements(
@@ -99,7 +98,7 @@ class TransformedSourceFile {
   }
 
   String getTransformedText() {
-    StringBuffer transformedSource = new StringBuffer();
+    StringBuffer transformedSource = StringBuffer();
 
     iterateReplacements(
         onUnmodified: transformedSource.write,
@@ -109,12 +108,10 @@ class TransformedSourceFile {
   }
 
   String getHtmlDiff() {
-    const HtmlEscape elementEscaper =
-        const HtmlEscape(convert_constant.HtmlEscapeMode.element);
-    const HtmlEscape attrEscaper =
-        const HtmlEscape(convert_constant.HtmlEscapeMode.attribute);
+    const HtmlEscape elementEscaper = HtmlEscape(HtmlEscapeMode.element);
+    const HtmlEscape attrEscaper = HtmlEscape(HtmlEscapeMode.attribute);
 
-    StringBuffer diff = new StringBuffer();
+    StringBuffer diff = StringBuffer();
 
     void writeDiff(String source, String className) {
       diff.write('<span class="$className">');
@@ -158,7 +155,7 @@ class TransformedSourceFile {
 }
 
 SourceSpan getSpan(SourceFile sourceFile, AstNode node,
-    {bool skipCommentAndMetadata: true}) {
+    {bool skipCommentAndMetadata = true}) {
   if (skipCommentAndMetadata && node is AnnotatedNode) {
     return sourceFile.span(
         node.firstTokenAfterCommentAndMetadata.offset, node.end);

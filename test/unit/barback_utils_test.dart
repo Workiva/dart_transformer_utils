@@ -33,13 +33,12 @@ var varWithCommentAndMeta = "annotated";
 void main() {
   group('assetIdToPackageUri()', () {
     test('returns original path for non-lib file', () {
-      var assetId = new AssetId('transformer_utils', 'test/test_utils.dart');
+      var assetId = AssetId('transformer_utils', 'test/test_utils.dart');
       expect(assetIdToPackageUri(assetId), Uri.parse('test/test_utils.dart'));
     });
 
     test('returns path with "package" scheme for lib file', () {
-      var assetId =
-          new AssetId('transformer_utils', 'lib/transformer_utils.dart');
+      var assetId = AssetId('transformer_utils', 'lib/transformer_utils.dart');
       expect(assetIdToPackageUri(assetId),
           Uri.parse('package:transformer_utils/transformer_utils.dart'));
     });
@@ -47,7 +46,7 @@ void main() {
 
   group('getSpanForNode()', () {
     test('should get node but skip comment and meta by default', () {
-      var sourceFile = new SourceFile.fromString(sourceFileText);
+      var sourceFile = SourceFile.fromString(sourceFileText);
       var unit = parseCompilationUnit(sourceFileText);
       var annotatedNode = unit.childEntities.last as AstNode;
       var span = getSpanForNode(sourceFile, annotatedNode);
@@ -55,7 +54,7 @@ void main() {
     });
 
     test('should not skip comment and meta if skip is false', () {
-      var sourceFile = new SourceFile.fromString(sourceFileText);
+      var sourceFile = SourceFile.fromString(sourceFileText);
       var unit = parseCompilationUnit(sourceFileText);
       var annotatedNode = unit.childEntities.last as AstNode;
       var span = getSpanForNode(sourceFile, annotatedNode,
@@ -70,7 +69,7 @@ void main() {
     });
 
     test('should return the whole span if the node is not annotated', () {
-      var sourceFile = new SourceFile.fromString(sourceFileText);
+      var sourceFile = SourceFile.fromString(sourceFileText);
       var unit = parseCompilationUnit(sourceFileText);
       var plainNode = unit.childEntities.first as AstNode;
       var span = getSpanForNode(sourceFile, plainNode);
