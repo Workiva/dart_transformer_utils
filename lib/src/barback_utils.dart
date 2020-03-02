@@ -14,7 +14,7 @@
 
 library transformer_utils.src.barback_utils;
 
-import 'package:analyzer/analyzer.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:build/build.dart';
 import 'package:path/path.dart' as path;
 import 'package:source_span/source_span.dart';

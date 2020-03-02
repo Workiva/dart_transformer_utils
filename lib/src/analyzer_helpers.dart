@@ -16,7 +16,7 @@ library transformer_utils.src.analyzer_helpers;
 
 import 'dart:mirrors' as mirrors;
 
-import 'package:analyzer/analyzer.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 
 /// Returns a copy of a class [member] declaration with [body] as a new
 /// implementation.
@@ -180,8 +180,6 @@ String _copyFieldDeclaration(FieldDeclaration decl, String initializer) {
 }
 
 String _copyGetterDeclaration(MethodDeclaration decl, String body) {
-  bool isAsync =
-      (decl.returnType?.type?.name ?? decl.returnType?.toString()) == 'Future';
   var result = '';
   if (decl.returnType != null) {
     result = '${decl.returnType} get';
@@ -193,8 +191,8 @@ String _copyGetterDeclaration(MethodDeclaration decl, String body) {
   }
 
   result = '$result ${decl.name.name}';
-  if (isAsync) {
-    result = '$result async';
+  if (decl.body.keyword != null) {
+    result = '$result ${decl.body.keyword}${decl.body.star ?? ''}';
   }
   result = '$result {\n$body\n}';
   return result;
@@ -210,8 +208,6 @@ String _copySetterDeclaration(MethodDeclaration decl, String body) {
 }
 
 String _copyMethodDeclaration(MethodDeclaration decl, String body) {
-  bool isAsync =
-      (decl.returnType?.type?.name ?? decl.returnType?.toString()) == 'Future';
   var result = '${decl.name.name}';
   if (decl.returnType != null) {
     result = '${decl.returnType} $result';
@@ -220,8 +216,8 @@ String _copyMethodDeclaration(MethodDeclaration decl, String body) {
     result = 'static $result';
   }
   result = '$result${decl.parameters}';
-  if (isAsync) {
-    result = '$result async';
+  if (decl.body.keyword != null) {
+    result = '$result ${decl.body.keyword}${decl.body.star ?? ''}';
   }
   result = '$result {\n$body\n  }';
   return result;

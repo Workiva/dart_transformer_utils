@@ -15,7 +15,8 @@
 @TestOn('vm')
 library transformer_utils.test.unit.barback_utils_test;
 
-import 'package:analyzer/analyzer.dart';
+import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:build/build.dart';
 import 'package:source_span/source_span.dart';
 import 'package:test/test.dart';
@@ -47,7 +48,8 @@ void main() {
   group('getSpanForNode()', () {
     test('should get node but skip comment and meta by default', () {
       var sourceFile = SourceFile.fromString(sourceFileText);
-      var unit = parseCompilationUnit(sourceFileText);
+      var unit =
+          parseString(content: sourceFileText, throwIfDiagnostics: false).unit;
       var annotatedNode = unit.childEntities.last as AstNode;
       var span = getSpanForNode(sourceFile, annotatedNode);
       expect(span.text, 'var varWithCommentAndMeta = "annotated";');
@@ -55,7 +57,8 @@ void main() {
 
     test('should not skip comment and meta if skip is false', () {
       var sourceFile = SourceFile.fromString(sourceFileText);
-      var unit = parseCompilationUnit(sourceFileText);
+      var unit =
+          parseString(content: sourceFileText, throwIfDiagnostics: false).unit;
       var annotatedNode = unit.childEntities.last as AstNode;
       var span = getSpanForNode(sourceFile, annotatedNode,
           skipCommentAndMetadata: false);
@@ -70,7 +73,8 @@ void main() {
 
     test('should return the whole span if the node is not annotated', () {
       var sourceFile = SourceFile.fromString(sourceFileText);
-      var unit = parseCompilationUnit(sourceFileText);
+      var unit =
+          parseString(content: sourceFileText, throwIfDiagnostics: false).unit;
       var plainNode = unit.childEntities.first as AstNode;
       var span = getSpanForNode(sourceFile, plainNode);
       expect(span.text, 'var plainVar = "plain";');

@@ -16,7 +16,7 @@ library transformer_utils.src.transformed_source_file;
 
 import 'dart:convert';
 
-import 'package:analyzer/analyzer.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:source_span/source_span.dart';
 
 /// A record used internally by [TransformedSourceFile] that represents the

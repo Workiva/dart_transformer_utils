@@ -15,7 +15,8 @@
 @TestOn('vm')
 library transformer_utils.test.unit.analyzer_helpers_test;
 
-import 'package:analyzer/analyzer.dart' hide startsWith;
+import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:test/test.dart';
 
 import 'package:transformer_utils/transformer_utils.dart';
@@ -204,34 +205,40 @@ main() {
 
   group('getDeclarationsAnnotatedBy()', () {
     test('no matching declarations', () {
-      var unit = parseCompilationUnit(
-          ['var a;', '@OtherAnnotation()', 'var b;', 'var c;'].join('\n'));
-      var matches = getDeclarationsAnnotatedBy(unit, TestAnnotation);
+      var result = parseString(
+          content:
+              ['var a;', '@OtherAnnotation()', 'var b;', 'var c;'].join('\n'),
+          throwIfDiagnostics: false);
+      var matches = getDeclarationsAnnotatedBy(result.unit, TestAnnotation);
       expect(matches, isEmpty);
     });
 
     test('one matching declaration', () {
-      var unit = parseCompilationUnit([
-        '@TestAnnotation("test")',
-        'var a;',
-        '@OtherAnnotation()',
-        'var b;',
-        'var c;'
-      ].join('\n'));
-      var matches = getDeclarationsAnnotatedBy(unit, TestAnnotation);
+      var result = parseString(
+          content: [
+            '@TestAnnotation("test")',
+            'var a;',
+            '@OtherAnnotation()',
+            'var b;',
+            'var c;'
+          ].join('\n'),
+          throwIfDiagnostics: false);
+      var matches = getDeclarationsAnnotatedBy(result.unit, TestAnnotation);
       expect(matches.length, 1);
     });
 
     test('multiple matching declarations', () {
-      var unit = parseCompilationUnit([
-        '@TestAnnotation("test")',
-        'var a;',
-        '@OtherAnnotation()',
-        'var b;',
-        '@TestAnnotation("test")',
-        'var c;'
-      ].join('\n'));
-      var matches = getDeclarationsAnnotatedBy(unit, TestAnnotation);
+      var result = parseString(
+          content: [
+            '@TestAnnotation("test")',
+            'var a;',
+            '@OtherAnnotation()',
+            'var b;',
+            '@TestAnnotation("test")',
+            'var c;'
+          ].join('\n'),
+          throwIfDiagnostics: false);
+      var matches = getDeclarationsAnnotatedBy(result.unit, TestAnnotation);
       expect(matches.length, 2);
     });
   });
@@ -300,7 +307,7 @@ main() {
             return 'value to be passed to constructor instead';
           });
 
-          expect(unsupportedArgument, const isInstanceOf<Expression>());
+          expect(unsupportedArgument, isA<Expression>());
           expect(instance.positional,
               equals('value to be passed to constructor instead'),
               reason:
@@ -318,7 +325,7 @@ main() {
             return 'value to be passed to constructor instead';
           });
 
-          expect(unsupportedArgument, const isInstanceOf<NamedExpression>());
+          expect(unsupportedArgument, isA<NamedExpression>());
           expect((unsupportedArgument as NamedExpression).name.label.name,
               equals('namedConstructorOnly'));
           expect(instance.namedConstructorOnly,

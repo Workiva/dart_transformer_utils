@@ -15,7 +15,7 @@
 @TestOn('vm')
 library transformer_utils.test.unit.node_with_meta_test;
 
-import 'package:analyzer/analyzer.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:test/test.dart';
 
 import 'package:transformer_utils/transformer_utils.dart';
