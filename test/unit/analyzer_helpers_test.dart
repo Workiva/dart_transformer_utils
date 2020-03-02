@@ -34,7 +34,7 @@ class TestClass {
   get untypedGetter => null;
   String get typedGetter => null;
   static String get staticGetter => null;
-  Future get asyncGetter => null;
+  Future get asyncGetter async => null;
 
   static void set staticSetter(v) { }
   void set setter(v) { }
@@ -43,7 +43,7 @@ class TestClass {
   untypedMethod() { }
   String typedMethod() { }
   static String staticMethod() { }
-  Future asyncMethod() { }
+  Future asyncMethod() async { }
   String methodWithArgs(String a, {int b}) { }
 }
 ''';
