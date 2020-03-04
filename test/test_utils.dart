@@ -14,7 +14,8 @@
 
 library transformer_utils.test_utils;
 
-import 'package:analyzer/analyzer.dart';
+import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 
 class TestAnnotation {
   final positional;
@@ -57,6 +58,7 @@ MethodDeclaration getMethodByName(ClassDeclaration classDecl, String name) {
 }
 
 CompilationUnitMember parseAndGetSingleMember(String source) {
-  var compilationUnit = parseCompilationUnit(source);
+  var compilationUnit =
+      parseString(content: source, throwIfDiagnostics: false).unit;
   return compilationUnit.declarations.single;
 }

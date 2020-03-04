@@ -15,7 +15,8 @@
 @TestOn('vm')
 library transformer_utils.test.unit.transformed_source_file_test;
 
-import 'package:analyzer/analyzer.dart' hide startsWith;
+import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:source_span/source_span.dart';
 import 'package:test/test.dart';
 import 'package:transformer_utils/src/transformed_source_file.dart';
@@ -215,7 +216,10 @@ main() {
 
     setUp(() {
       sourceFile = SourceFile.fromString(source);
-      node = parseCompilationUnit(source).declarations.single;
+      node = parseString(content: source, throwIfDiagnostics: false)
+          .unit
+          .declarations
+          .single;
     });
 
     test(
