@@ -57,8 +57,8 @@ MethodDeclaration? getMethodByName(ClassDeclaration classDecl, String name) {
   return null;
 }
 
-CompilationUnitMember parseAndGetSingleMember(String source) {
+T parseAndGetSingleMember<T extends CompilationUnitMember>(String source) {
   var compilationUnit =
       parseString(content: source, throwIfDiagnostics: false).unit;
-  return compilationUnit.declarations.single;
+  return compilationUnit.declarations.single as T;
 }

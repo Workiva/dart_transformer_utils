@@ -89,8 +89,8 @@ dynamic getValue(Expression expression,
 /// or null if no matching annotations are found.
 Annotation? getMatchingAnnotation(AnnotatedNode member, Type annotationType) {
   // Be sure to use `originalDeclaration` so that generic parameters work.
-  mirrors.ClassMirror classMirror =
-      mirrors.reflectClass(annotationType).originalDeclaration as mirrors.ClassMirror;
+  final classMirror = mirrors.reflectClass(annotationType).originalDeclaration
+      as mirrors.ClassMirror;
   String className = mirrors.MirrorSystem.getName(classMirror.simpleName);
 
   // Find the annotation that matches [type]'s name.
@@ -148,8 +148,8 @@ dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType,
   String constructorName = _getConstructorName(matchingAnnotation) ?? '';
 
   // Be sure to use `originalDeclaration` so that generic parameters work.
-  mirrors.ClassMirror classMirror =
-      mirrors.reflectClass(annotationType).originalDeclaration as mirrors.ClassMirror;
+  final classMirror = mirrors.reflectClass(annotationType).originalDeclaration
+      as mirrors.ClassMirror;
 
   try {
     var instanceMirror = classMirror.newInstance(

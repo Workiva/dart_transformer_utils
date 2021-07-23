@@ -59,8 +59,8 @@ void expectLines(String actual, String expected) {
 main() {
   group('copyClassMember()', () {
     test('throws on unsupported class member', () {
-      var node = parseAndGetSingleMember(classDef);
-      var ctor = getConstructor(node as ClassDeclaration);
+      var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+      var ctor = getConstructor(node);
       expect(() {
         copyClassMember(ctor, 'body');
       }, throwsUnsupportedError);
@@ -68,29 +68,29 @@ main() {
 
     group('FieldDeclaration', () {
       test('copies an untyped field', () {
-        var node = parseAndGetSingleMember(classDef);
-        var field = getFieldByName(node as ClassDeclaration, 'field');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var field = getFieldByName(node, 'field');
         var expected = 'var field = "copy";';
         expect(copyClassMember(field, '"copy"'), equals(expected));
       });
 
       test('copies a typed field', () {
-        var node = parseAndGetSingleMember(classDef);
-        var field = getFieldByName(node as ClassDeclaration, 'typedField');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var field = getFieldByName(node, 'typedField');
         var expected = 'String typedField = "copy";';
         expect(copyClassMember(field, '"copy"'), equals(expected));
       });
 
       test('copies a static field', () {
-        var node = parseAndGetSingleMember(classDef);
-        var field = getFieldByName(node as ClassDeclaration, 'staticField');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var field = getFieldByName(node, 'staticField');
         var expected = 'static String staticField = "copy";';
         expect(copyClassMember(field, '"copy"'), equals(expected));
       });
 
       test('copies a field witout an initializer', () {
-        var node = parseAndGetSingleMember(classDef);
-        var field = getFieldByName(node as ClassDeclaration, 'typedField');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var field = getFieldByName(node, 'typedField');
         var expected = 'String typedField;';
         expect(copyClassMember(field, ''), equals(expected));
       });
@@ -98,24 +98,24 @@ main() {
 
     group('MethodDeclaration (Getter)', () {
       test('copies untyped getter', () {
-        var node = parseAndGetSingleMember(classDef);
-        var getter = getMethodByName(node as ClassDeclaration, 'untypedGetter');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var getter = getMethodByName(node, 'untypedGetter');
         var expected =
             ['get untypedGetter {', 'return "copy";', '}'].join('\n');
         expectLines(copyClassMember(getter, 'return "copy";'), expected);
       });
 
       test('copies typed getter', () {
-        var node = parseAndGetSingleMember(classDef);
-        var getter = getMethodByName(node as ClassDeclaration, 'typedGetter');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var getter = getMethodByName(node, 'typedGetter');
         var expected =
             ['String get typedGetter {', 'return "copy";', '}'].join('\n');
         expectLines(copyClassMember(getter, 'return "copy";'), expected);
       });
 
       test('copies static getter', () {
-        var node = parseAndGetSingleMember(classDef);
-        var getter = getMethodByName(node as ClassDeclaration, 'staticGetter');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var getter = getMethodByName(node, 'staticGetter');
         var expected = [
           'static String get staticGetter {',
           'return "copy";',
@@ -125,8 +125,8 @@ main() {
       });
 
       test('copies async getter', () {
-        var node = parseAndGetSingleMember(classDef);
-        var getter = getMethodByName(node as ClassDeclaration, 'asyncGetter');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var getter = getMethodByName(node, 'asyncGetter');
         var expected = ['Future get asyncGetter async {', 'return "copy";', '}']
             .join('\n');
         expectLines(copyClassMember(getter, 'return "copy";'), expected);
@@ -135,23 +135,23 @@ main() {
 
     group('MethodDeclaration (Setter)', () {
       test('copies setter', () {
-        var node = parseAndGetSingleMember(classDef);
-        var setter = getMethodByName(node as ClassDeclaration, 'setter');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var setter = getMethodByName(node, 'setter');
         var expected = ['void set setter(v) {', 'c = "copy";', '}'].join('\n');
         expectLines(copyClassMember(setter, 'c = "copy";'), expected);
       });
 
       test('copies typed setter', () {
-        var node = parseAndGetSingleMember(classDef);
-        var setter = getMethodByName(node as ClassDeclaration, 'typedSetter');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var setter = getMethodByName(node, 'typedSetter');
         var expected =
             ['void set typedSetter(String v) {', 'c = "copy";', '}'].join('\n');
         expectLines(copyClassMember(setter, 'c = "copy";'), expected);
       });
 
       test('copies static setter', () {
-        var node = parseAndGetSingleMember(classDef);
-        var setter = getMethodByName(node as ClassDeclaration, 'staticSetter');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var setter = getMethodByName(node, 'staticSetter');
         var expected = ['static void set staticSetter(v) {', 'c = "copy";', '}']
             .join('\n');
         expectLines(copyClassMember(setter, 'c = "copy";'), expected);
@@ -160,39 +160,39 @@ main() {
 
     group('MethodDeclaration', () {
       test('copies untyped method', () {
-        var node = parseAndGetSingleMember(classDef);
-        var method = getMethodByName(node as ClassDeclaration, 'untypedMethod');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var method = getMethodByName(node, 'untypedMethod');
         var expected = ['untypedMethod() {', 'c = "copy";', '}'].join('\n');
         expectLines(copyClassMember(method, 'c = "copy";'), expected);
       });
 
       test('copies typed method', () {
-        var node = parseAndGetSingleMember(classDef);
-        var method = getMethodByName(node as ClassDeclaration, 'typedMethod');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var method = getMethodByName(node, 'typedMethod');
         var expected =
             ['String typedMethod() {', 'c = "copy";', '}'].join('\n');
         expectLines(copyClassMember(method, 'c = "copy";'), expected);
       });
 
       test('copies static method', () {
-        var node = parseAndGetSingleMember(classDef);
-        var method = getMethodByName(node as ClassDeclaration, 'staticMethod');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var method = getMethodByName(node, 'staticMethod');
         var expected =
             ['static String staticMethod() {', 'c = "copy";', '}'].join('\n');
         expectLines(copyClassMember(method, 'c = "copy";'), expected);
       });
 
       test('copies async method', () async {
-        var node = parseAndGetSingleMember(classDef);
-        var method = getMethodByName(node as ClassDeclaration, 'asyncMethod');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var method = getMethodByName(node, 'asyncMethod');
         var expected =
             ['Future asyncMethod() async {', 'c = "copy";', '}'].join('\n');
         expectLines(copyClassMember(method, 'c = "copy";'), expected);
       });
 
       test('copies method with args', () async {
-        var node = parseAndGetSingleMember(classDef);
-        var method = getMethodByName(node as ClassDeclaration, 'methodWithArgs');
+        var node = parseAndGetSingleMember<ClassDeclaration>(classDef);
+        var method = getMethodByName(node, 'methodWithArgs');
         var expected = [
           'String methodWithArgs(String a, {int b}) {',
           'c = "copy";',
