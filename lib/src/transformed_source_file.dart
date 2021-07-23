@@ -92,7 +92,7 @@ class TransformedSourceFile {
     }
 
     var unmodifiedText = sourceFile.getText(lastEdge);
-    if (onUnmodified != null && unmodifiedText != null) {
+    if (onUnmodified != null) {
       onUnmodified(unmodifiedText);
     }
   }

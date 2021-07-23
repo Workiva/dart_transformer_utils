@@ -172,7 +172,7 @@ String _copyFieldDeclaration(FieldDeclaration decl, String initializer) {
     result = '${decl.staticKeyword} $result';
   }
   result = '$result ${decl.fields.variables.first.name.name}';
-  if (initializer != null && initializer.isNotEmpty) {
+  if (initializer.isNotEmpty) {
     result = '$result = $initializer;';
   } else {
     result = '$result;';
@@ -229,14 +229,8 @@ String _copyMethodDeclaration(MethodDeclaration decl, String body) {
 ///
 /// Workaround for a Dart analyzer issue where the constructor name is included
 /// in [annotation.name].
-String _getClassName(Annotation annotation) {
-  var className = annotation.name?.name;
-  if (className != null) {
-    className = className.split('.').first;
-  }
-
-  return className;
-}
+String _getClassName(Annotation annotation) =>
+    annotation.name.name.split('.').first;
 
 /// Returns the name of the constructor being instantiated for [annotation], or
 /// null if the annotation is not the invocation of a named constructor.
