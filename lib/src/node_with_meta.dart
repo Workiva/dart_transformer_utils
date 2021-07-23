@@ -36,7 +36,7 @@ class NodeWithMeta<TNode extends AnnotatedNode, TMeta> {
 
   /// The arguments passed to the metadata that are not supported by [getValue],
   /// (or by special handling in subclasses) and therefore not represented in the instantiation of [meta].
-  List<Expression>? unsupportedArguments;
+  final List<Expression> unsupportedArguments = [];
 
   /// Construct a [NodeWithMeta] instance from an [AnnotatedNode].
   /// The original node will be available via [node].
@@ -44,14 +44,13 @@ class NodeWithMeta<TNode extends AnnotatedNode, TMeta> {
   NodeWithMeta(TNode node, {this.assetId})
       : this.node = node,
         this.metaNode = getMatchingAnnotation(node, TMeta) {
-    this.unsupportedArguments = <Expression>[];
     this._meta = instantiateAnnotation(node, TMeta,
-        onUnsupportedArgument: this.unsupportedArguments!.add);
+        onUnsupportedArgument: unsupportedArguments.add);
   }
 
   /// Whether this node's metadata has arguments that could not be initialized using [getValue]
   /// (or by special handling in subclasses), and therefore cannot represented in the instantiation of [meta].
-  bool get isIncomplete => unsupportedArguments!.isNotEmpty;
+  bool get isIncomplete => unsupportedArguments.isNotEmpty;
 
   /// A reflectively-instantiated version of [metaNode], if it exists.
   ///

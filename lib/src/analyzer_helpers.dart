@@ -107,14 +107,15 @@ Annotation? getMatchingAnnotation(AnnotatedNode member, Type annotationType) {
 /// Naively assumes that the name of the [annotationType] class is canonical.
 dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType,
     {dynamic onUnsupportedArgument(Expression argument)?}) {
-  var matchingAnnotation = getMatchingAnnotation(member, annotationType);
+  final matchingAnnotation = getMatchingAnnotation(member, annotationType);
 
   // If no annotation is found, return null.
   if (matchingAnnotation == null) {
     return null;
   }
 
-  if (matchingAnnotation.arguments == null) {
+  final matchingAnnotationArgs = matchingAnnotation.arguments;
+  if (matchingAnnotationArgs == null) {
     throw 'Annotation not invocation of constructor: `$matchingAnnotation`. '
         'This is likely due to invalid usage of the annotation class, but could'
         'also be a name conflict with the specified type `$annotationType`';
@@ -124,7 +125,7 @@ dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType,
   Map<Symbol, dynamic> namedParameters = {};
   List positionalParameters = [];
 
-  matchingAnnotation.arguments!.arguments.forEach((argument) {
+  matchingAnnotationArgs.arguments.forEach((argument) {
     var onUnsupportedExpression = onUnsupportedArgument == null
         ? null
         : (_) => onUnsupportedArgument(argument);
