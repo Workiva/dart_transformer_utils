@@ -23,8 +23,8 @@ import 'package:transformer_utils/src/transformed_source_file.dart';
 
 main() {
   group('TransformedSourceFile', () {
-    SourceFile testSourceFile;
-    TransformedSourceFile transformedFile;
+    late SourceFile testSourceFile;
+    late TransformedSourceFile transformedFile;
 
     setUp(() {
       testSourceFile =
@@ -71,7 +71,7 @@ main() {
 
     group('remove()', () {
       const String text = 'line 0\nline 1\nline 2\nline 3\nline 4';
-      SourceSpan lines1Through3Span;
+      late SourceSpan lines1Through3Span;
 
       setUp(() {
         testSourceFile = SourceFile.fromString(text);
@@ -211,8 +211,8 @@ main() {
         '@Annotation\n'
         'class Node {}\n';
 
-    SourceFile sourceFile;
-    AnnotatedNode node;
+    late SourceFile sourceFile;
+    late AnnotatedNode node;
 
     setUp(() {
       sourceFile = SourceFile.fromString(source);

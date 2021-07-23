@@ -27,24 +27,24 @@ void main() {
     test('instantiates and provides access to an annotation and node', () {
       var member = parseAndGetSingleMember('@TestAnnotation("hello")\nvar a;');
       var nodeWithMeta =
-          NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member);
+          NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member as TopLevelVariableDeclaration);
 
       expect(nodeWithMeta.node, same(member));
       expect(nodeWithMeta.metaNode, isNotNull);
-      expect(nodeWithMeta.metaNode.name.name, 'TestAnnotation');
+      expect(nodeWithMeta.metaNode!.name.name, 'TestAnnotation');
       expect(nodeWithMeta.meta, isNotNull);
-      expect(nodeWithMeta.meta.positional, 'hello');
+      expect(nodeWithMeta.meta!.positional, 'hello');
     });
 
     test('partially instantiates an "incomplete" annotation', () {
       var member = parseAndGetSingleMember(
           '@TestAnnotation(someIdentifier, named: "hello")\nvar a;');
       var nodeWithMeta =
-          NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member);
+          NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member as TopLevelVariableDeclaration);
 
       expect(nodeWithMeta.node, same(member));
       expect(nodeWithMeta.metaNode, isNotNull);
-      expect(nodeWithMeta.metaNode.name.name, 'TestAnnotation');
+      expect(nodeWithMeta.metaNode!.name.name, 'TestAnnotation');
 
       expect(nodeWithMeta.isIncomplete, isTrue);
       expect(nodeWithMeta.unsupportedArguments, hasLength(1));
@@ -53,16 +53,16 @@ void main() {
       expect(nodeWithMeta.potentiallyIncompleteMeta, isNotNull,
           reason:
               'should still have attempted to instantiate the incomplete annotation');
-      expect(nodeWithMeta.potentiallyIncompleteMeta.named, equals('hello'),
+      expect(nodeWithMeta.potentiallyIncompleteMeta!.named, equals('hello'),
           reason: 'should still have passed the supported argument');
-      expect(nodeWithMeta.potentiallyIncompleteMeta.positional, isNull,
+      expect(nodeWithMeta.potentiallyIncompleteMeta!.positional, isNull,
           reason: 'should have used null for unsupported argument');
     });
 
     test('gracefully handles a node without an annotation', () {
       var member = parseAndGetSingleMember('var a;');
       var nodeWithMeta =
-          NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member);
+          NodeWithMeta<TopLevelVariableDeclaration, TestAnnotation>(member as TopLevelVariableDeclaration);
 
       expect(nodeWithMeta.node, same(member));
       expect(nodeWithMeta.metaNode, isNull);
