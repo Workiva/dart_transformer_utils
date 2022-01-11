@@ -5,12 +5,9 @@
 
 > Utilities relating to code generation, Dart analyzer, logging, etc. for use in Pub transformers.
 
-- [**Development**](#development)
-
-
 ## Development
 
-This project leverages [the dart_dev package](https://pub.dartlang.org/packages/dart_dev)
-for most of its tooling needs, including static analysis, code formatting,
-running tests, collecting coverage, and serving examples. Check out
-[the dart_dev readme](https://github.com/Workiva/dart_dev) for more information.
+- Analysis: `dart analyze`
+- Format code: `dart format .`
+- Tests: `dart test`
+- Dependency validation: `dart run dependency_validator`
