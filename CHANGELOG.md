@@ -1,3 +1,7 @@
+## 0.2.17
+
+- Widen analyzer range to include v2
+
 ## 0.2.15
 
 - Widen analyzer range to include v1
