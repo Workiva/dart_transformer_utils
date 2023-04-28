@@ -17,6 +17,7 @@ library transformer_utils.src.analyzer_helpers;
 import 'dart:mirrors' as mirrors;
 
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 
 /// Returns a copy of a class [member] declaration with [body] as a new
 /// implementation.
@@ -24,7 +25,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 /// Currently only supports:
 ///   * [FieldDeclaration] (single variable only)
 ///   * [MethodDeclaration] (getter, setter, and methods)
-String copyClassMember(ClassMember member, String body) {
+String copyClassMember(ClassMember? member, String body) {
   if (member is FieldDeclaration) return _copyFieldDeclaration(member, body);
   if (member is MethodDeclaration) {
     if (member.isGetter) return _copyGetterDeclaration(member, body);
@@ -62,7 +63,7 @@ Iterable<CompilationUnitMember> getDeclarationsAnnotatedBy(
 ///   * [IntegerLiteral]
 ///   * [NullLiteral]
 dynamic getValue(Expression expression,
-    {dynamic onUnsupportedExpression(Expression expression)}) {
+    {dynamic onUnsupportedExpression(Expression expression)?}) {
   if (expression is StringLiteral) {
     var value = expression.stringValue;
     if (value != null) {
@@ -86,16 +87,16 @@ dynamic getValue(Expression expression,
 
 /// Returns the first annotation AST node on [member] of type [annotationType],
 /// or null if no matching annotations are found.
-Annotation getMatchingAnnotation(AnnotatedNode member, Type annotationType) {
+Annotation? getMatchingAnnotation(AnnotatedNode member, Type annotationType) {
   // Be sure to use `originalDeclaration` so that generic parameters work.
-  mirrors.ClassMirror classMirror =
-      mirrors.reflectClass(annotationType).originalDeclaration;
+  final classMirror = mirrors.reflectClass(annotationType).originalDeclaration
+      as mirrors.ClassMirror;
   String className = mirrors.MirrorSystem.getName(classMirror.simpleName);
 
   // Find the annotation that matches [type]'s name.
-  return member.metadata.firstWhere((annotation) {
+  return member.metadata.firstWhereOrNull((annotation) {
     return _getClassName(annotation) == className;
-  }, orElse: () => null);
+  });
 }
 
 /// Uses reflection to instantiate and returns the first annotation on [member] of type
@@ -105,15 +106,16 @@ Annotation getMatchingAnnotation(AnnotatedNode member, Type annotationType) {
 ///
 /// Naively assumes that the name of the [annotationType] class is canonical.
 dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType,
-    {dynamic onUnsupportedArgument(Expression argument)}) {
-  var matchingAnnotation = getMatchingAnnotation(member, annotationType);
+    {dynamic onUnsupportedArgument(Expression argument)?}) {
+  final matchingAnnotation = getMatchingAnnotation(member, annotationType);
 
   // If no annotation is found, return null.
   if (matchingAnnotation == null) {
     return null;
   }
 
-  if (matchingAnnotation.arguments == null) {
+  final matchingAnnotationArgs = matchingAnnotation.arguments;
+  if (matchingAnnotationArgs == null) {
     throw 'Annotation not invocation of constructor: `$matchingAnnotation`. '
         'This is likely due to invalid usage of the annotation class, but could'
         'also be a name conflict with the specified type `$annotationType`';
@@ -123,7 +125,7 @@ dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType,
   Map<Symbol, dynamic> namedParameters = {};
   List positionalParameters = [];
 
-  matchingAnnotation.arguments.arguments.forEach((argument) {
+  matchingAnnotationArgs.arguments.forEach((argument) {
     var onUnsupportedExpression = onUnsupportedArgument == null
         ? null
         : (_) => onUnsupportedArgument(argument);
@@ -146,8 +148,8 @@ dynamic instantiateAnnotation(AnnotatedNode member, Type annotationType,
   String constructorName = _getConstructorName(matchingAnnotation) ?? '';
 
   // Be sure to use `originalDeclaration` so that generic parameters work.
-  mirrors.ClassMirror classMirror =
-      mirrors.reflectClass(annotationType).originalDeclaration;
+  final classMirror = mirrors.reflectClass(annotationType).originalDeclaration
+      as mirrors.ClassMirror;
 
   try {
     var instanceMirror = classMirror.newInstance(
@@ -171,7 +173,7 @@ String _copyFieldDeclaration(FieldDeclaration decl, String initializer) {
     result = '${decl.staticKeyword} $result';
   }
   result = '$result ${decl.fields.variables.first.name.name}';
-  if (initializer != null && initializer.isNotEmpty) {
+  if (initializer.isNotEmpty) {
     result = '$result = $initializer;';
   } else {
     result = '$result;';
@@ -228,21 +230,15 @@ String _copyMethodDeclaration(MethodDeclaration decl, String body) {
 ///
 /// Workaround for a Dart analyzer issue where the constructor name is included
 /// in [annotation.name].
-String _getClassName(Annotation annotation) {
-  var className = annotation.name?.name;
-  if (className != null) {
-    className = className.split('.').first;
-  }
-
-  return className;
-}
+String _getClassName(Annotation annotation) =>
+    annotation.name.name.split('.').first;
 
 /// Returns the name of the constructor being instantiated for [annotation], or
 /// null if the annotation is not the invocation of a named constructor.
 ///
 /// Workaround for a Dart analyzer issue where the constructor name is included
 /// in [annotation.name].
-String _getConstructorName(Annotation annotation) {
+String? _getConstructorName(Annotation annotation) {
   var constructorName = annotation.constructorName?.name;
   if (constructorName == null) {
     var periodIndex = annotation.name.name.indexOf('.');

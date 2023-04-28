@@ -28,8 +28,8 @@ class TestAnnotation {
         named = null;
 }
 
-ConstructorDeclaration getConstructor(ClassDeclaration classDecl,
-    {String name}) {
+ConstructorDeclaration? getConstructor(ClassDeclaration classDecl,
+    {String? name}) {
   for (var member in classDecl.members) {
     if (member is ConstructorDeclaration && member.name?.name == name) {
       return member;
@@ -38,7 +38,7 @@ ConstructorDeclaration getConstructor(ClassDeclaration classDecl,
   return null;
 }
 
-FieldDeclaration getFieldByName(ClassDeclaration classDecl, String name) {
+FieldDeclaration? getFieldByName(ClassDeclaration classDecl, String name) {
   for (var member in classDecl.members) {
     if (member is FieldDeclaration &&
         member.fields.variables.first.name.name == name) {
@@ -48,7 +48,7 @@ FieldDeclaration getFieldByName(ClassDeclaration classDecl, String name) {
   return null;
 }
 
-MethodDeclaration getMethodByName(ClassDeclaration classDecl, String name) {
+MethodDeclaration? getMethodByName(ClassDeclaration classDecl, String name) {
   for (var member in classDecl.members) {
     if (member is MethodDeclaration && member.name.name == name) {
       return member;
@@ -57,8 +57,8 @@ MethodDeclaration getMethodByName(ClassDeclaration classDecl, String name) {
   return null;
 }
 
-CompilationUnitMember parseAndGetSingleMember(String source) {
+T parseAndGetSingleMember<T extends CompilationUnitMember>(String source) {
   var compilationUnit =
       parseString(content: source, throwIfDiagnostics: false).unit;
-  return compilationUnit.declarations.single;
+  return compilationUnit.declarations.single as T;
 }

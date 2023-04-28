@@ -62,9 +62,9 @@ class TransformedSourceFile {
   }
 
   void iterateReplacements(
-      {onUnmodified(String string),
-      onRemoval(String string),
-      onAddition(String string)}) {
+      {onUnmodified(String string)?,
+      onRemoval(String string)?,
+      onAddition(String string)?}) {
     _replacements.sort((r1, r2) => r1.span.compareTo(r2.span));
 
     var lastEdge = 0;
@@ -92,7 +92,7 @@ class TransformedSourceFile {
     }
 
     var unmodifiedText = sourceFile.getText(lastEdge);
-    if (onUnmodified != null && unmodifiedText != null) {
+    if (onUnmodified != null) {
       onUnmodified(unmodifiedText);
     }
   }
@@ -128,7 +128,7 @@ class TransformedSourceFile {
         <!DOCTYPE html>
         <html>
         <head>
-          <title>Transformer Diff - ${attrEscaper.convert(sourceFile.url.path)}</title>
+          <title>Transformer Diff - ${attrEscaper.convert(sourceFile.url!.path)}</title>
           <style>
             .diff-unmodified {
                 color: #444;
