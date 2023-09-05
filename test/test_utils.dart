@@ -31,7 +31,7 @@ class TestAnnotation {
 ConstructorDeclaration? getConstructor(ClassDeclaration classDecl,
     {String? name}) {
   for (var member in classDecl.members) {
-    if (member is ConstructorDeclaration && member.name?.name == name) {
+    if (member is ConstructorDeclaration && member.name?.lexeme == name) {
       return member;
     }
   }
@@ -41,7 +41,7 @@ ConstructorDeclaration? getConstructor(ClassDeclaration classDecl,
 FieldDeclaration? getFieldByName(ClassDeclaration classDecl, String name) {
   for (var member in classDecl.members) {
     if (member is FieldDeclaration &&
-        member.fields.variables.first.name.name == name) {
+        member.fields.variables.first.name.lexeme == name) {
       return member;
     }
   }
@@ -50,7 +50,7 @@ FieldDeclaration? getFieldByName(ClassDeclaration classDecl, String name) {
 
 MethodDeclaration? getMethodByName(ClassDeclaration classDecl, String name) {
   for (var member in classDecl.members) {
-    if (member is MethodDeclaration && member.name.name == name) {
+    if (member is MethodDeclaration && member.name.lexeme == name) {
       return member;
     }
   }

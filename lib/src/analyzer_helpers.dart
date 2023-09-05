@@ -172,7 +172,7 @@ String _copyFieldDeclaration(FieldDeclaration decl, String initializer) {
   if (decl.staticKeyword != null) {
     result = '${decl.staticKeyword} $result';
   }
-  result = '$result ${decl.fields.variables.first.name.name}';
+  result = '$result ${decl.fields.variables.first.name.lexeme}';
   if (initializer.isNotEmpty) {
     result = '$result = $initializer;';
   } else {
@@ -192,7 +192,7 @@ String _copyGetterDeclaration(MethodDeclaration decl, String body) {
     result = 'static $result';
   }
 
-  result = '$result ${decl.name.name}';
+  result = '$result ${decl.name.lexeme}';
   if (decl.body.keyword != null) {
     result = '$result ${decl.body.keyword}${decl.body.star ?? ''}';
   }
@@ -205,12 +205,12 @@ String _copySetterDeclaration(MethodDeclaration decl, String body) {
   if (decl.isStatic) {
     result = 'static $result';
   }
-  result = '$result ${decl.name.name}${decl.parameters} {\n$body\n  }';
+  result = '$result ${decl.name.lexeme}${decl.parameters} {\n$body\n  }';
   return result;
 }
 
 String _copyMethodDeclaration(MethodDeclaration decl, String body) {
-  var result = '${decl.name.name}';
+  var result = '${decl.name.lexeme}';
   if (decl.returnType != null) {
     result = '${decl.returnType} $result';
   }
