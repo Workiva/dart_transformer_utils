@@ -1,4 +1,4 @@
-FROM drydock-prod.workiva.net/workiva/dart2_base_image:1
+FROM drydock-prod.workiva.net/workiva/dart2_base_image:2
 WORKDIR /build/
 COPY . /build
 RUN dart pub get
