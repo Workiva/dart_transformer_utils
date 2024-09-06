@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: dart pub get
       - name: Validate dependencies
-        run: dart run dependency_validator
+        run: dart pub global activate dependency_validator && dart pub global run dependency_validator
       - name: Check formatting
         run: dart format --output=none --set-exit-if-changed .
         if: ${{ matrix.sdk == 'stable' }}
