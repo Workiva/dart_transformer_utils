@@ -32,6 +32,7 @@ jobs:
       - name: Run tests
         run: dart test
       - uses: anchore/sbom-action@v0
+        if: ${{ matrix.sdk == 'stable' }}
         with:
           path: ./
           format: cyclonedx-json
