@@ -4,10 +4,10 @@ description: Utilities relating to code generation, Dart analyzer, logging, etc.
 homepage: https://github.com/Workiva/dart_transformer_utils
 
 environment:
-  sdk: '>=2.19.0 <3.0.0'
+  sdk: '>=2.19.0 <4.0.0'
 
 dependencies:
-  analyzer: '>=5.0.0 <7.0.0'
+  analyzer: '>=5.0.0 <8.0.0'
   build:  ^2.0.3
   collection: ^1.15.0
   path: ^1.8.0
