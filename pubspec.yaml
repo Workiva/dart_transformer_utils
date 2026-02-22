@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   analyzer: '>=5.0.0 <8.0.0'
-  build:  ^2.0.3
+  build:  '>=2.0.3 <5.0.0'
   collection: ^1.15.0
   path: ^1.8.0
   source_span: ^1.8.1
